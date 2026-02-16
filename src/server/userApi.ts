@@ -677,9 +677,10 @@ function startWatcher(sourceRoot: string) {
 }
 
 // 从文件系统加载所有已启用的自定义源
-// 路径变更：/data/data/users/source/{username} 和 /data/data/users/source/_open
+// 路径变更：DATA_PATH/users/source/{username} 和 DATA_PATH/users/source/_open
 export async function initUserApis(targetUser?: string) {
-    const sourceRoot = path.join(process.cwd(), 'data', 'data', 'users', 'source')
+    const dataPath = process.env.DATA_PATH || path.join(process.cwd(), 'data')
+    const sourceRoot = path.join(dataPath, 'users', 'source')
     const stats = { loadedCount: 0 }
 
     // 更新最后加载时间

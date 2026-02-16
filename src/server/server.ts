@@ -16,6 +16,7 @@ import musicSdkRaw from '@/modules/utils/musicSdk/index.js'
 const musicSdk = musicSdkRaw as any
 import { initUserApis, callUserApiGetMusicUrl, isSourceSupported, getLoadedApis } from './userApi'
 import * as customSourceHandlers from './customSourceHandlers'
+import * as fileCache from './fileCache'
 
 
 const getMime = (filename: string) => {
@@ -884,6 +885,111 @@ const handleStartServer = async (port = 9527, ip = '127.0.0.1') => await new Pro
         })
         return
       }
+
+      // [新增] File Cache APIs
+      // 1. Config Cache Location
+      if (pathname === '/api/music/cache/config' && req.method === 'POST') {
+        void readBody(req).then(body => {
+          try {
+            const { location } = JSON.parse(body)
+            if (location) {
+              fileCache.setCacheLocation(location)
+              res.writeHead(200)
+              res.end(JSON.stringify({ success: true }))
+            } else {
+              res.writeHead(400)
+              res.end('Missing location')
+            }
+          } catch (e) {
+            res.writeHead(500)
+            res.end('Error')
+          }
+        })
+        return
+      }
+
+      // 2. Check Cache
+      if (pathname === '/api/music/cache/check' && req.method === 'GET') {
+        const name = urlObj.searchParams.get('name')
+        const singer = urlObj.searchParams.get('singer')
+        const source = urlObj.searchParams.get('source')
+        const songmid = urlObj.searchParams.get('songmid')
+        const songId = urlObj.searchParams.get('songId')
+        const quality = urlObj.searchParams.get('quality')
+
+        if (!name || !singer || !source || (!songmid && !songId)) {
+          res.writeHead(400)
+          res.end('Missing params')
+          return
+        }
+
+        const result = fileCache.checkCache({ name, singer, source, songmid, songId, quality })
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify(result))
+        return
+      }
+
+      // 3. Trigger Download
+      if (pathname === '/api/music/cache/download' && req.method === 'POST') {
+        void readBody(req).then(body => {
+          try {
+            const { songInfo, url, quality } = JSON.parse(body)
+            if (!songInfo || !url) {
+              res.writeHead(400)
+              res.end('Missing params')
+              return
+            }
+
+            // Fire and forget (background download)
+            void fileCache.downloadAndCache(songInfo, url, quality)
+              .then(() => console.log(`[Cache] Downloaded ${songInfo.name}`))
+              .catch(err => console.error(`[Cache] Failed to download ${songInfo.name}:`, err))
+
+            res.writeHead(200)
+            res.end(JSON.stringify({ success: true, message: 'Download started' }))
+          } catch (e) {
+            res.writeHead(500)
+            res.end('Error')
+          }
+        })
+        return
+      }
+
+      // 4. Serve Cached File
+      if (pathname.startsWith('/api/music/cache/file/')) {
+        const filename = pathname.replace('/api/music/cache/file/', '')
+        if (filename) {
+          fileCache.serveCacheFile(req, res, decodeURIComponent(filename))
+          return
+        }
+      }
+
+      // 5. Get Cache Statistics
+      if (pathname === '/api/music/cache/stats' && req.method === 'GET') {
+        try {
+          const stats = fileCache.getCacheStats()
+          res.writeHead(200, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ success: true, data: stats }))
+        } catch (e: any) {
+          res.writeHead(500, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ success: false, message: e.message || 'Failed to get cache stats' }))
+        }
+        return
+      }
+
+      // 6. Clear All Cache
+      if (pathname === '/api/music/cache/clear' && req.method === 'POST') {
+        try {
+          const result = fileCache.clearAllCache()
+          res.writeHead(200, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ success: true, data: result }))
+        } catch (e: any) {
+          res.writeHead(500, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ success: false, message: e.message || 'Failed to clear cache' }))
+        }
+        return
+      }
+
 
       // [New] Fetch Lyrics
       if (pathname === '/api/music/lyric' && req.method === 'GET') {

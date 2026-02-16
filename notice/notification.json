@@ -18,25 +18,25 @@
         }
     },
     {
-        "comment": "=== 版本更新 v1.3.2 ===",
-        "id": "update_v1_3_2",
+        "comment": "=== 版本更新 v1.4.0 ===",
+        "id": "update_v1_4_0",
         "status": "active",
         "type": "version",
         "logic": {
-            "target_version": "v1.3.2",
+            "target_version": "v1.4.0",
             "operator": "<",
             "interval_hours": 24
         },
         "ui": {
-            "title": "发现新版本 v1.3.2",
-            "date": "2026-02-16",
-            "message": "本次更新引入了全新的脚本加载机制与翻译支持：\n1. 引入“混合 VM”脚本加载机制，大幅提升自定义源兼容性\n2. 新增歌词翻译与罗马音支持，可同时展示三条轨道\n3. 优化脚本元数据解析，支持更多注释格式且智能补全版本号\n4. 修复管理控制台密码修改功能及模态框 UI 样式问题",
+            "title": "发现新版本 v1.4.0",
+            "date": "2026-02-17",
+            "message": "本次更新引入了音频可视化和完善的缓存管理功能：\n1. 🎵 全新音频可视化：支持多种动态频谱效果，高度可定制\n2. 💾 本地缓存系统：缓存歌词、链接和歌曲文件，大幅提升性能\n3. 📊 缓存统计管理：实时查看存储占用，一键清除各类缓存\n4. 🔄 版本更新优化：强化自动刷新机制，更新后无需手动清除缓存\n5. 🐛 兼容性修复：解决 Node.js 旧版本运行问题",
             "confirm_text": "去查看",
             "cancel_text": "稍后提醒"
         },
         "action": {
             "type": "link",
-            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.3.2"
+            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.4.0"
         }
     }
 ]

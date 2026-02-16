@@ -97,7 +97,8 @@ async function getScriptInfo(scriptContent: string, allowUnsafeVM: boolean = fal
 
 // 辅助函数：获取源存储目录
 function getSourceDir(username?: string) {
-    const root = path.join(process.cwd(), 'data', 'data', 'users', 'source')
+    const dataPath = process.env.DATA_PATH || path.join(process.cwd(), 'data')
+    const root = path.join(dataPath, 'users', 'source')
     // 如果 username 是 'open' 或 'default' 或空，则映射到 '_open'
     const targetDirName = (username && username !== 'default' && username !== 'open') ? username : '_open'
     return path.join(root, targetDirName)

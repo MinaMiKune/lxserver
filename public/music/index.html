@@ -782,6 +782,75 @@
                             <div class="pt-6 border-t border-gray-100 mb-2">
                                 <h3 class="font-medium text-emerald-600 mb-3">本地缓存与重置 (Cache & Reset)</h3>
                                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col gap-3">
+
+                                    <!-- Cache Toggles -->
+                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                        <div>
+                                            <div class="text-sm font-bold text-gray-700">缓存歌词 (Cache Lyrics)</div>
+                                            <div class="text-xs text-gray-400">本地缓存歌词、翻译及罗马音，减少网络请求</div>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="setting-enable-lyric-cache" class="sr-only peer"
+                                                onchange="updateSetting('enableLyricCache', this.checked)">
+                                            <div
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                        <div>
+                                            <div class="text-sm font-bold text-gray-700">缓存歌曲链接 (Cache Song URL)</div>
+                                            <div class="text-xs text-gray-400">优先播放缓存链接，失败时自动刷新</div>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="setting-enable-url-cache" class="sr-only peer"
+                                                onchange="updateSetting('enableSongUrlCache', this.checked)">
+                                            <div
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Server Cache Settings -->
+                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                        <div>
+                                            <div class="text-sm font-bold text-gray-700">缓存歌曲文件 (Cache Song File)</div>
+                                            <div class="text-xs text-gray-400">下载并缓存歌曲文件到服务器，优先播放本地缓存</div>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="setting-enable-server-cache" class="sr-only peer"
+                                                onchange="updateSetting('enableServerCache', this.checked)">
+                                            <div
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Cache Location Setting -->
+                                    <div class="pb-3 border-b border-gray-200">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-700">缓存歌曲位置 (Cache Location)
+                                                </div>
+                                                <div class="text-xs text-gray-400">选择文件存储位置</div>
+                                            </div>
+                                        </div>
+                                        <select id="setting-server-cache-location"
+                                            onchange="updateSetting('serverCacheLocation', this.value); updateServerCacheConfig(this.value)"
+                                            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block p-2.5">
+                                            <option value="data">DATA_PATH (WebDAV同步)</option>
+                                            <option value="root">运行目录 (仅本地)</option>
+                                        </select>
+                                    </div>
+
+                                    <div
+                                        class="text-xs text-gray-500 italic mt-1 mb-2 p-2 bg-yellow-50 rounded border border-yellow-100 flex items-start gap-1">
+                                        <i class="fas fa-info-circle mt-0.5 text-yellow-600"></i>
+                                        <span>播放优先级: 链接缓存 > 本地文件 > 在线获取 (自动缓存)</span>
+                                    </div>
+
+                                    <!-- Storage Info -->
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col">
                                             <span class="text-sm font-bold text-gray-700">浏览器存储占用</span>
@@ -791,10 +860,41 @@
                                             class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">0
                                             KB</span>
                                     </div>
+
+                                    <!-- Server Cache Info -->
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-gray-700">服务器缓存占用</span>
+                                            <span class="text-xs text-gray-400">已缓存的歌曲文件大小</span>
+                                        </div>
+                                        <span id="server-cache-info"
+                                            class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">计算中...</span>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <button onclick="clearCache('lyric')"
+                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
+                                            <i class="fas fa-trash-alt mr-1"></i> 清除歌词缓存
+                                        </button>
+                                        <button onclick="clearCache('url')"
+                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
+                                            <i class="fas fa-link mr-1"></i> 清除链接缓存
+                                        </button>
+                                        <button onclick="updateServerCacheSize()"
+                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-xs font-bold transition-colors">
+                                            <i class="fas fa-sync-alt mr-1"></i> 刷新缓存统计
+                                        </button>
+                                        <button onclick="clearServerCache()"
+                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-red-600 hover:border-red-200 rounded-lg text-xs font-bold transition-colors">
+                                            <i class="fas fa-server mr-1"></i> 清除服务器缓存
+                                        </button>
+                                    </div>
+
                                     <button onclick="resetAllSettings()"
-                                        class="w-full py-2.5 px-4 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white font-bold rounded-lg transition-all duration-300 border border-red-100 flex items-center justify-center gap-3 text-center">
+                                        class="w-full py-2.5 px-4 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white font-bold rounded-lg transition-all duration-300 border border-red-100 flex items-center justify-center gap-3 text-center mt-1">
                                         <i class="fas fa-undo-alt flex-shrink-0"></i>
-                                        <span class="leading-tight">重置所有设置为默认 (Reset Settings)</span>
+                                        <span class="leading-tight">重置所有设置 (Reset Settings)</span>
                                     </button>
                                 </div>
                             </div>
@@ -1410,9 +1510,12 @@
                 </div>
             </div>
             <div class="overflow-hidden flex-1">
-                <div id="player-title" class="font-bold text-gray-800 truncate text-sm md:text-base">暂无播放</div>
+                <div id="player-title"
+                    class="font-bold text-gray-800 truncate text-sm md:text-base dynamic-marquee min-w-0"
+                    data-text="暂无播放">暂无播放</div>
                 <div class="flex items-center gap-2">
-                    <div id="player-artist" class="text-xs text-gray-500 truncate">选择一首歌曲播放</div>
+                    <div id="player-artist" class="text-xs text-gray-500 truncate dynamic-marquee min-w-0"
+                        data-text="选择一首歌曲播放">选择一首歌曲播放</div>
                     <div id="player-status"
                         class="text-xs text-emerald-600 font-medium whitespace-nowrap hidden sm:block"></div>
                 </div>
