@@ -270,6 +270,23 @@
             background-color: rgba(255, 255, 255, 0.9) !important;
         }
 
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.3);
+        }
+
         /* Detail Title multi-line support */
         #detail-title {
             display: -webkit-box;
@@ -1510,11 +1527,13 @@
                 <!-- Song Info -->
                 <div class="mb-4 md:mb-8 text-center md:text-left px-4 md:px-0 cursor-pointer transition-all duration-300 active:scale-95 select-none"
                     onclick="toggleDetailCover()" title="点击切换封面显示">
-                    <div id="detail-title-container" class="w-full overflow-hidden whitespace-nowrap mb-1">
+                    <div id="detail-title-container"
+                        class="w-full overflow-hidden whitespace-nowrap mb-1 flex items-center justify-center md:justify-start gap-3">
                         <div id="detail-title"
-                            class="inline-block text-2xl md:text-4xl font-black text-gray-800 drop-shadow-sm min-w-full">
+                            class="inline-block text-2xl md:text-4xl font-black text-gray-800 drop-shadow-sm">
                             Song Name
                         </div>
+                        <div id="detail-source" class="flex-shrink-0"></div>
                     </div>
                     <div id="detail-artist" class="text-base md:text-xl text-gray-600 font-medium truncate">Artist</div>
                     <div id="toggle-hint"
@@ -1566,10 +1585,13 @@
                     <i class="fas fa-expand text-white"></i>
                 </div>
             </div>
-            <div class="overflow-hidden flex-1">
-                <div id="player-title"
-                    class="font-bold text-gray-800 truncate text-sm md:text-base dynamic-marquee min-w-0"
-                    data-text="暂无播放">暂无播放</div>
+            <div class="overflow-hidden flex-1 flex flex-col justify-center">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div id="player-title"
+                        class="font-bold text-gray-800 truncate text-sm md:text-base dynamic-marquee min-w-0"
+                        data-text="暂无播放">暂无播放</div>
+                    <div id="player-source" class="flex-shrink-0"></div>
+                </div>
                 <div class="flex flex-col min-w-0">
                     <div id="player-artist" class="text-xs text-gray-500 truncate dynamic-marquee min-w-0"
                         data-text="选择一首歌曲播放">选择一首歌曲播放</div>
@@ -1579,6 +1601,10 @@
             <!-- Like button -->
             <button id="player-like-btn" class="text-gray-300 hover:text-red-500 transition-colors ml-2"><i
                     class="fas fa-heart"></i></button>
+            <!-- Comment button (Mobile) -->
+            <button
+                class="md:hidden text-gray-500 hover:text-emerald-600 text-xs font-bold border border-gray-300 rounded px-1.5 py-0.5 ml-2"
+                onclick="toggleCommentModal()">评</button>
 
         </div>
 
@@ -1695,6 +1721,9 @@
 
         <!-- Volume & Lyrics (Hidden on small mobile if needed, or simplified) -->
         <div class="w-full md:w-1/4 hidden md:flex items-center justify-end gap-4 order-2 md:order-none mr-8">
+            <button
+                class="text-gray-500 hover:text-emerald-600 text-sm font-bold border border-gray-300 rounded px-2 py-0.5"
+                onclick="toggleCommentModal()">评</button>
             <button
                 class="text-gray-500 hover:text-emerald-600 text-sm font-bold border border-gray-300 rounded px-2 py-0.5"
                 onclick="toggleLyrics()">词</button>
@@ -1918,6 +1947,91 @@
                     倒计时结束后将自动停止当前正在播放的音乐。<br>
                     祝您好梦 🌙
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Modal (Glassmorphism) -->
+    <div id="comment-modal"
+        class="fixed inset-0 z-[70] hidden items-center justify-center p-4 md:p-6 transition-all duration-300">
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" onclick="toggleCommentModal()"></div>
+        <div id="comment-modal-content"
+            class="relative w-full max-w-2xl h-[85vh] md:h-[80vh] bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500">
+            <!-- Header -->
+            <div class="p-4 md:p-6 border-b border-gray-100/50 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-100">
+                        <i class="fas fa-comments text-white text-lg md:text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-xl font-black text-gray-800" id="comment-title">歌曲评论</h3>
+                        <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">
+                            Comments Flow</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="refreshComments()"
+                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 hover:text-emerald-500 transition-colors rounded-xl hover:bg-emerald-50">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button onclick="toggleCommentModal()"
+                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors rounded-xl hover:bg-red-50">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="px-4 md:px-6 py-2 md:py-3 border-b border-gray-100/30 flex items-center gap-4 md:gap-6">
+                <button id="tab-hot-comments" onclick="switchCommentType('hot')"
+                    class="relative py-2 text-sm font-black transition-colors text-emerald-600">
+                    最热评论 <span id="hot-comment-count" class="text-[10px] opacity-60 ml-0.5"></span>
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500 rounded-full"></div>
+                </button>
+                <button id="tab-new-comments" onclick="switchCommentType('new')"
+                    class="relative py-2 text-sm font-black transition-colors text-gray-400 hover:text-gray-600">
+                    最新评论 <span id="new-comment-count" class="text-[10px] opacity-60 ml-0.5"></span>
+                    <div
+                        class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500 rounded-full scale-x-0 transition-transform">
+                    </div>
+                </button>
+            </div>
+
+            <!-- List Area -->
+            <div id="comment-list-container"
+                class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 space-y-6 md:space-y-8 pb-12">
+                <!-- Loading State -->
+                <div id="comment-loader" class="flex flex-col items-center justify-center py-20 space-y-4">
+                    <div class="w-12 h-12 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin">
+                    </div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">正在加载评论...</p>
+                </div>
+                <!-- List Container -->
+                <div id="comment-list" class="space-y-6 md:space-y-8"></div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-3 bg-gray-50/50 border-t border-gray-100/30 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <button onclick="changeCommentPage(-1)"
+                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
+                        id="btn-comment-prev">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <span id="comment-page-indicator"
+                        class="text-[10px] font-black text-gray-500 min-w-[60px] text-center">
+                        PAGE 1 / 1
+                    </span>
+                    <button onclick="changeCommentPage(1)"
+                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
+                        id="btn-comment-next">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                    <span id="comment-source-info">Source: --</span>
+                </div>
             </div>
         </div>
     </div>

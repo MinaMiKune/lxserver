@@ -1615,30 +1615,44 @@ const handleStartServer = async (port = 9527, ip = '127.0.0.1') => await new Pro
       }
 
 
-      // [新增] 封面 API (备用)
-      if (pathname === '/api/music/pic' && req.method === 'POST') {
+      // [新增] 评论 API
+      if (pathname === '/api/music/comment' && req.method === 'POST') {
         void readBody(req).then(async body => {
           try {
-            let { songInfo } = JSON.parse(body)
+            let { songInfo, type, page, limit } = JSON.parse(body)
             songInfo = normalizeSongInfo(songInfo)
             if (!songInfo || !songInfo.source) {
+              console.warn('[Comment] Invalid request body:', body)
               throw new Error('Invalid songInfo')
             }
             const source = songInfo.source
-            if (!musicSdk[source] || !musicSdk[source].getPic) {
-              throw new Error(`Source ${source} not supported`)
+            console.log(`[Comment] Request: ${source} - ${songInfo.name} - ${type} - page ${page}`)
+
+            if (!musicSdk[source] || !musicSdk[source].comment) {
+              console.warn(`[Comment] Source ${source} not supported for comments`)
+              throw new Error(`Source ${source} not supported for comments`)
             }
-            const result = await musicSdk[source].getPic(songInfo)
+
+            const method = type === 'hot' ? 'getHotComment' : 'getComment'
+            if (!musicSdk[source].comment[method]) {
+              console.warn(`[Comment] Method ${method} not supported for source ${source}`)
+              throw new Error(`Method ${method} not supported for source ${source}`)
+            }
+
+            const result = await musicSdk[source].comment[method](songInfo, page, limit)
+            console.log(`[Comment] Success: ${source} - ${result.comments?.length} comments found`)
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify(result))
           } catch (err: any) {
-            console.error(err)
-            res.writeHead(500)
-            res.end(err.message)
+            console.error('[Comment] Error:', err.message)
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ error: err.message, code: 500 }))
           }
         })
         return
       }
+
+      // [新增] 封面 API (备用)
 
       // [新增] 自定义源管理 API
       if (pathname === '/api/custom-source/validate' && req.method === 'POST') {

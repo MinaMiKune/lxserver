@@ -44,3 +44,20 @@ export const dateFormat = (_date, format = 'Y-M-D h:m:s') => {
         .replace('s', numFix(date.getSeconds()))
 }
 
+/**
+ * 格式化相对时间
+ * @param {number} time 
+ */
+export const dateFormat2 = (time) => {
+    let differ = Math.trunc((Date.now() - time) / 1000)
+    if (differ < 60) {
+        return differ + '秒前'
+    } else if (differ < 3600) {
+        return Math.trunc(differ / 60) + '分钟前'
+    } else if (differ < 86400) {
+        return Math.trunc(differ / 3600) + '小时前'
+    } else {
+        return dateFormat(time)
+    }
+}
+

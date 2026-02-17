@@ -371,4 +371,29 @@ export default {
   },
 }
 ```
+## 4. QQ音乐 (tx) - 评论总数修复
+**文件路径**: src/modules/utils/musicSdk/tx/comment.js
+**修改目的**: 修复 QQ 音乐最新评论接口有时返回 commenttotal 为 0，导致前端无法翻页且显示错误的问题。
+**修改方案**: 增加回推逻辑，如果 commenttotal 为 0 或不存在，则使用当前获取到的评论列表长度作为 fallback。
+**修改代码**:
+```javascript
+// 修改前
+return {
+  source: 'tx',
+  comments: this.filterNewComment(comment.commentlist),
+  total: comment.commenttotal,
+  page,
+  limit,
+  maxPage: Math.ceil(comment.commenttotal / limit) || 1,
+}
 
+// 修改后
+const total = comment.commenttotal || (comment.commentlist ? comment.commentlist.length : 0)
+return {
+  source: 'tx',
+  comments: this.filterNewComment(comment.commentlist),
+  total,
+  page,
+  limit,
+  maxPage: Math.ceil(total / limit) || 1,
+}

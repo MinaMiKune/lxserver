@@ -114,13 +114,14 @@ export default {
     if (statusCode != 200 || body.code !== 0) throw new Error('获取评论失败')
     // console.log(body, statusCode)
     const comment = body.comment
+    const total = comment.commenttotal || (comment.commentlist ? comment.commentlist.length : 0)
     return {
       source: 'tx',
       comments: this.filterNewComment(comment.commentlist),
-      total: comment.commenttotal,
+      total,
       page,
       limit,
-      maxPage: Math.ceil(comment.commenttotal / limit) || 1,
+      maxPage: Math.ceil(total / limit) || 1,
     }
   },
   async getHotComment(mInfo, page = 1, limit = 20) {

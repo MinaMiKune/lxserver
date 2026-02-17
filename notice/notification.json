@@ -18,25 +18,25 @@
         }
     },
     {
-        "comment": "=== 版本更新 v1.4.1 ===",
-        "id": "update_v1_4_1",
+        "comment": "=== 版本更新 v1.5.0 ===",
+        "id": "update_v1_5_0",
         "status": "active",
         "type": "version",
         "logic": {
-            "target_version": "v1.4.1",
+            "target_version": "v1.5.0",
             "operator": "<",
             "interval_hours": 24
         },
         "ui": {
-            "title": "发现新版本 v1.4.1",
+            "title": "发现新版本 v1.5.0",
             "date": "2026-02-17",
-            "message": "本次更新引入了全局键盘快捷键功能并优化了播放逻辑：\n1. ⌨️ 全局快捷键：支持 Space 播放暂停、[ ] 切歌、Alt+1-4 换页等核心操作\n2. ⏩ 智能跳转：方向键支持 5% 步进和长按连续跳转，操作更精准\n3. 🌊 逻辑优化：修复切歌残留播放问题，增强淡入淡出兼容性\n4. 🎨 布局修复：优化频谱开启后的界面居中显示及底部边距\n5. � 更多更新详见版本日志记录",
+            "message": "本次更新带来了大家期待已久的评论区功能，并优化了播放显示：\n1. 💬 歌曲评论区：支持查看 QQ、网易、酷狗、酷我、咪咕的热门及最新评论\n2. 🏷️ 来源音质标签：播放页及详情页新增来源渠道与音质标识\n3. ⚙️ 分页优化：支持递归回复展示、全页码缓存，提供丝滑浏览体验\n4. 🛡️ 播放守护：修复播放失败时的无限跳曲循环，并提供清晰引导提示\n5. 📜 更多更新详见版本日志记录",
             "confirm_text": "去查看",
             "cancel_text": "稍后提醒"
         },
         "action": {
             "type": "link",
-            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.4.1"
+            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.5.0"
         }
     }
 ]
