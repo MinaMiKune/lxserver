@@ -55,26 +55,29 @@ jobs:
 
       - name: Delete old Docker image versions
         run: |
-          # 尝试删除现有 Tag 的镜像版本
           PACKAGE_NAME="lxserver"
           OWNER="${{ github.repository_owner }}"
           
           for TAG in "${{ env.PROJECT_VERSION }}" "latest"; do
             echo "Checking for existing tag: $TAG"
-            # 尝试通过 orgs 或 users API 获取版本 ID
-            VERSION_ID=$(gh api "/orgs/$OWNER/packages/container/$PACKAGE_NAME/versions" --jq ".[] | select(.metadata.container.tags[] == \"$TAG\") | .id" 2>/dev/null || \
-                        gh api "/users/$OWNER/packages/container/$PACKAGE_NAME/versions" --jq ".[] | select(.metadata.container.tags[] == \"$TAG\") | .id" 2>/dev/null)
             
-            if [ ! -z "$VERSION_ID" ]; then
+            # 优先尝试用户 API，再尝试组织 API
+            # 使用 --jq 过滤出 ID，如果命令失败或没找到，则返回空
+            VERSION_ID=$(gh api "/users/$OWNER/packages/container/$PACKAGE_NAME/versions" --jq ".[] | select(.metadata.container.tags // [] | contains([\"$TAG\"])) | .id" 2>/dev/null || \
+                        gh api "/orgs/$OWNER/packages/container/$PACKAGE_NAME/versions" --jq ".[] | select(.metadata.container.tags // [] | contains([\"$TAG\"])) | .id" 2>/dev/null || echo "")
+            
+            # 确保 VERSION_ID 是数字（有效的 ID），而不是 JSON 错误信息
+            if [[ "$VERSION_ID" =~ ^[0-9]+$ ]]; then
               echo "Deleting old version for $TAG (ID: $VERSION_ID)"
-              gh api -X DELETE "/orgs/$OWNER/packages/container/$PACKAGE_NAME/versions/$VERSION_ID" 2>/dev/null || \
-              gh api -X DELETE "/users/$OWNER/packages/container/$PACKAGE_NAME/versions/$VERSION_ID" 2>/dev/null
+              gh api -X DELETE "/users/$OWNER/packages/container/$PACKAGE_NAME/versions/$VERSION_ID" 2>/dev/null || \
+              gh api -X DELETE "/orgs/$OWNER/packages/container/$PACKAGE_NAME/versions/$VERSION_ID" 2>/dev/null || echo "Delete failed, skipping..."
             else
-              echo "No existing version found for tag: $TAG"
+              echo "No valid existing version ID found for tag: $TAG, skipping cleanup."
             fi
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

@@ -66,6 +66,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.PROJECT_VERSION }}
+          target_commitish: ${{ github.sha }}
           name: LX Music Sync Server ${{ env.PROJECT_VERSION }}
           body_path: RELEASE_NOTES.md
           files: release/lx-music-sync-server-${{ env.PROJECT_VERSION }}.zip
