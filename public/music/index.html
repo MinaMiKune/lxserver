@@ -58,6 +58,14 @@
             border-right: 3px solid var(--c-600);
         }
 
+        .active-sub-item {
+            color: var(--c-600) !important;
+        }
+
+        .active-sub-item i {
+            color: var(--c-600) !important;
+        }
+
         /* Lyric View Styles */
         .mask-image-gradient {
             mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
@@ -426,7 +434,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 h-screen flex flex-col overflow-hidden text-gray-800 font-sans">
+<body class="t-bg-main h-screen flex flex-col overflow-hidden t-text-main font-sans">
 
     <!-- Main Container -->
     <div class="flex flex-1 overflow-hidden relative">
@@ -438,8 +446,8 @@
 
         <!-- Sidebar -->
         <aside id="main-sidebar"
-            class="w-64 bg-white shadow-lg flex flex-col z-[60] fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 md:z-30 h-full pb-32 transition-all duration-300">
-            <div class="h-16 flex items-center justify-center border-b border-gray-100 relative">
+            class="w-64 t-bg-panel shadow-lg flex flex-col z-[60] fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 md:z-30 h-full pb-32 transition-all duration-300">
+            <div class="h-16 flex items-center justify-center border-b t-border-main relative">
                 <svg viewBox="0 0 447.942 447.943" class="w-8 h-8 mr-2 rounded-lg shadow-sm"
                     xmlns="http://www.w3.org/2000/svg">
                     <path style="fill: var(--c-400)"
@@ -458,14 +466,14 @@
                 <ul>
                     <li>
                         <a href="#" onclick="switchTab('search')" id="tab-search"
-                            class="active-tab flex items-center px-6 py-3 hover:bg-gray-50 transition-colors duration-200">
+                            class="active-tab flex items-center px-6 py-3 hover:t-bg-main transition-colors duration-200">
                             <i class="fas fa-search w-6 text-center"></i>
                             <span class="ml-3 font-medium">搜索</span>
                         </a>
                     </li>
                     <li>
                         <div onclick="handleFavoritesClick()" id="tab-favorites"
-                            class="flex items-center justify-between px-6 py-3 text-gray-600 hover:bg-gray-50 transition-colors duration-200 cursor-pointer select-none">
+                            class="flex items-center justify-between px-6 py-3 t-text-muted hover:t-bg-main transition-colors duration-200 cursor-pointer select-none">
                             <div class="flex items-center">
                                 <i class="fas fa-folder w-6 text-center"></i>
                                 <span class="ml-3 font-medium">我的收藏</span>
@@ -473,11 +481,11 @@
                             <i id="favorites-arrow"
                                 class="fas fa-chevron-down text-xs transition-transform duration-200"></i>
                         </div>
-                        <ul id="favorites-children" class="bg-gray-50/50 overflow-hidden transition-all duration-300">
+                        <ul id="favorites-children" class="t-bg-main/50 overflow-hidden transition-all duration-300">
                             <li class="px-6 py-2">
                                 <div id="my-lists-container" class="space-y-1 pb-2">
                                     <!-- Lists will be injected here -->
-                                    <div class="px-6 py-2 text-sm text-gray-400">请先在设置中登录</div>
+                                    <div class="px-6 py-2 text-sm t-text-muted">请先在设置中登录</div>
                                 </div>
                             </li>
                             <li class="px-6 pb-4">
@@ -490,14 +498,14 @@
                     </li>
                     <li>
                         <a href="#" onclick="switchTab('settings')" id="tab-settings"
-                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition-colors duration-200">
+                            class="flex items-center px-6 py-3 t-text-muted hover:t-bg-main transition-colors duration-200">
                             <i class="fas fa-cog w-6 text-center"></i>
                             <span class="ml-3 font-medium">设置</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" onclick="switchTab('about')" id="tab-about"
-                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition-colors duration-200">
+                            class="flex items-center px-6 py-3 t-text-muted hover:t-bg-main transition-colors duration-200">
                             <i class="fas fa-info-circle w-6 text-center"></i>
                             <span class="ml-3 font-medium">关于</span>
                         </a>
@@ -507,7 +515,7 @@
 
             <!-- Mini Player Info (Optional, cover art here) -->
             <div class="hidden md:block [@media(max-height:650px)]:!hidden sidebar-song-info-wrapper mt-auto">
-                <div id="sidebar-song-info" class="p-4 border-t border-gray-100 hidden">
+                <div id="sidebar-song-info" class="p-4 border-t t-border-main hidden">
                     <img id="sidebar-cover" src="/music/assets/logo.svg" onerror="this.src='/music/assets/logo.svg'"
                         alt="Cover" class="w-full rounded-lg shadow-md mb-3 dynamic-logo">
                     <div class="text-center">
@@ -517,7 +525,7 @@
                 </div>
             </div>
 
-            <div class="hidden md:block px-6 py-4 text-[10px] text-gray-400 text-center border-t border-gray-100">
+            <div class="hidden md:block px-6 py-4 text-[10px] t-text-muted text-center border-t t-border-main">
                 Copyright © 2026 <a href="https://github.com/xcq0607" target="_blank"
                     class="hover:text-emerald-500 transition-colors">xcq0607</a>.<br>
                 Licensed under Apache-2.0.
@@ -525,20 +533,20 @@
         </aside>
 
         <!-- Content Area -->
-        <main class="flex-1 flex flex-col bg-gray-50 relative overflow-hidden">
+        <main class="flex-1 flex flex-col t-bg-main relative overflow-hidden">
 
             <!-- Header / Search Bar Helper (Top strip) -->
-            <header class="h-16 bg-white/80 glass shadow-sm flex items-center justify-between px-4 md:px-6 z-10">
+            <header class="h-16 t-bg-panel glass shadow-sm flex items-center justify-between px-4 md:px-6 z-10">
                 <div class="flex items-center gap-3">
-                    <button onclick="toggleSidebar()" class="md:hidden text-gray-600 p-2 hover:bg-gray-100 rounded-lg">
+                    <button onclick="toggleSidebar()" class="md:hidden t-text-muted p-2 hover:t-bg-track rounded-lg">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <div class="active-tab-title text-lg font-bold text-gray-700 truncate" id="page-title">搜索音乐</div>
+                    <div class="active-tab-title text-lg font-bold t-text-main truncate" id="page-title">搜索音乐</div>
                     <!-- Sleep Timer Trigger -->
                     <div id="sleep-timer-trigger"
-                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 cursor-pointer transition-all border border-transparent hover:border-gray-200 group ml-1"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:t-bg-track cursor-pointer transition-all border border-transparent hover:t-border-main group ml-1"
                         onclick="openSleepTimerModal()" title="睡眠定时">
-                        <i class="far fa-clock text-gray-400 group-hover:text-emerald-500 transition-colors"></i>
+                        <i class="far fa-clock t-text-muted group-hover:text-emerald-500 transition-colors"></i>
                         <span id="sleep-timer-countdown"
                             class="text-xs font-mono font-bold text-emerald-600 hidden">00:00</span>
                     </div>
@@ -554,17 +562,17 @@
 
                     <!-- Logout Button (only shown when auth is enabled) -->
                     <button id="logout-btn" onclick="handleLogout()"
-                        class="hidden items-center gap-1.5 text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
+                        class="hidden items-center gap-1.5 t-text-muted hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
                         title="退出登录">
                         <i class="fas fa-sign-out-alt"></i>
                         <span class="hidden sm:inline text-xs font-medium">退出</span>
                     </button>
 
                     <a href="https://github.com/XCQ0607/lxserver" target="_blank"
-                        class="text-gray-400 hover:text-gray-600 transition-colors" title="GitHub">
+                        class="t-text-muted hover:t-text-muted transition-colors" title="GitHub">
                         <i class="fab fa-github text-xl"></i>
                     </a>
-                    <div class="text-sm text-gray-400" id="app-version">v1.0.0 Web</div>
+                    <div class="text-sm t-text-muted" id="app-version">v1.0.0 Web</div>
                 </div>
             </header>
 
@@ -578,9 +586,9 @@
                     <div class="flex flex-col md:flex-row gap-2 md:gap-4 mb-4 md:mb-6">
                         <!-- Search Input -->
                         <div class="flex-1 relative">
-                            <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                            <i class="fas fa-search absolute left-4 top-3.5 t-text-muted"></i>
                             <input type="text" id="search-input"
-                                class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm text-sm md:text-base"
+                                class="w-full pl-10 pr-4 py-3 t-bg-panel border t-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm text-sm md:text-base"
                                 placeholder="搜索歌曲、歌手..." onkeypress="handleSearchKeyPress(event)">
                         </div>
 
@@ -594,7 +602,7 @@
                             </button>
 
                             <select id="search-source" onchange="doSearch()"
-                                class="flex-1 md:flex-none px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm text-gray-700 font-medium text-sm md:text-base">
+                                class="flex-1 md:flex-none px-4 py-3 t-bg-panel border t-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm t-text-main font-medium text-sm md:text-base">
                                 <option value="wy">网易云音乐</option>
                                 <option value="tx">QQ音乐</option>
                                 <option value="kg">酷狗音乐</option>
@@ -603,7 +611,7 @@
                             </select>
 
                             <button onclick="openCustomSourceModal()"
-                                class="p-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-600 hover:text-emerald-600 transition-colors shadow-sm"
+                                class="p-3 t-bg-panel border t-border-main rounded-xl hover:t-bg-main t-text-muted hover:text-emerald-600 transition-colors shadow-sm"
                                 title="管理自定义源">
                                 <i class="fas fa-plug"></i>
                             </button>
@@ -615,7 +623,7 @@
 
                     <!-- Search Results Container -->
                     <div
-                        class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                        class="flex-1 t-bg-panel rounded-2xl shadow-sm border t-border-main overflow-hidden flex flex-col">
                         <!-- Batch Toolbar (Hidden by default) -->
                         <div id="batch-toolbar"
                             class="hidden bg-emerald-50 border-b border-emerald-200 p-3 flex items-center justify-between">
@@ -623,9 +631,9 @@
                                 <span class="text-sm text-emerald-700">已选择: <span id="batch-selected-count"
                                         class="font-bold">0</span> 首</span>
                                 <button onclick="selectAllVisible()"
-                                    class="text-xs px-3 py-1 bg-white border border-emerald-300 rounded hover:bg-emerald-50 text-emerald-700">全选</button>
+                                    class="text-xs px-3 py-1 t-bg-panel border border-emerald-300 rounded hover:bg-emerald-50 text-emerald-700">全选</button>
                                 <button onclick="deselectAll()"
-                                    class="text-xs px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100 text-gray-600">取消</button>
+                                    class="text-xs px-3 py-1 t-bg-panel border border-gray-300 rounded hover:t-bg-track t-text-muted">取消</button>
                             </div>
                             <div class="flex items-center gap-2">
                                 <button onclick="batchDownloadFromList()"
@@ -637,12 +645,12 @@
                                     <i class="fas fa-trash mr-1"></i>批量删除
                                 </button>
                                 <button onclick="toggleBatchMode()"
-                                    class="text-xs px-4 py-1.5 bg-gray-500 hover:bg-gray-600 text-white rounded transition-colors">退出</button>
+                                    class="text-xs px-4 py-1.5 t-bg-main0 hover:bg-gray-600 text-white rounded transition-colors">退出</button>
                             </div>
                         </div>
                         <!-- Header -->
                         <div id="search-results-header"
-                            class="grid grid-cols-12 gap-2 md:gap-4 p-3 md:p-4 border-b border-gray-100 bg-gray-50 text-gray-500 text-sm font-medium">
+                            class="grid grid-cols-12 gap-2 md:gap-4 p-3 md:p-4 border-b t-border-main t-bg-main text-gray-500 text-sm font-medium">
                             <div class="col-span-2 sm:col-span-1 text-center flex items-center justify-center gap-2">
                                 <span>#</span>
                                 <button onclick="toggleBatchMode()"
@@ -650,27 +658,28 @@
                                     <i class="fas fa-tasks"></i>
                                 </button>
                             </div>
-                            <div class="col-span-8 sm:col-span-7 md:col-span-6 lg:col-span-4">歌曲标题</div>
+                            <div class="col-span-8 sm:col-span-7 md:col-span-6 lg:col-span-4" id="header-title">歌曲标题
+                            </div>
                             <div
                                 class="hidden sm:block sm:col-span-3 md:col-span-3 lg:col-span-3 text-right md:text-left">
                                 歌手</div>
-                            <div class="hidden lg:block lg:col-span-2">专辑</div>
+                            <div class="hidden lg:block lg:col-span-2" id="header-album">专辑</div>
                             <div class="hidden md:block md:col-span-1 text-center">时长</div>
                         </div>
                         <div id="search-results" class="flex-1 overflow-y-auto p-2 space-y-1">
                             <!-- Items will be injected here -->
-                            <div class="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+                            <div class="flex flex-col items-center justify-center h-full t-text-muted space-y-4">
                                 <i class="fas fa-music text-6xl opacity-20"></i>
                                 <p>输入关键词开始搜索音乐</p>
                             </div>
                         </div>
                         <!-- Pagination -->
-                        <div class="h-12 border-t border-gray-100 flex items-center justify-between px-6 bg-gray-50">
+                        <div class="h-12 border-t t-border-main flex items-center justify-between px-6 t-bg-main">
                             <button onclick="prevPage()"
                                 class="text-gray-500 hover:text-emerald-600 disabled:opacity-30 transition-colors">
                                 <i class="fas fa-chevron-left"></i> 上一页
                             </button>
-                            <span id="pagination-info" class="text-xs text-gray-400 font-mono">第 1 页</span>
+                            <span id="pagination-info" class="text-xs t-text-muted font-mono">第 1 页</span>
                             <button onclick="nextPage()"
                                 class="text-gray-500 hover:text-emerald-600 disabled:opacity-30 transition-colors">
                                 下一页 <i class="fas fa-chevron-right"></i>
@@ -682,18 +691,18 @@
                 <!-- Favorites View -->
                 <div id="view-favorites"
                     class="absolute inset-0 flex flex-col px-6 pt-6 md:px-12 md:pt-12 pb-32 hidden opacity-0 transition-all duration-300">
-                    <div class="flex-1 flex flex-col items-center justify-center text-gray-400">
+                    <div class="flex-1 flex flex-col items-center justify-center t-text-muted">
                         <div class="relative mb-8">
                             <div
                                 class="w-32 h-32 bg-emerald-50 rounded-full flex items-center justify-center animate-pulse">
                                 <i class="fas fa-heart text-6xl text-emerald-500/20"></i>
                             </div>
                             <div
-                                class="absolute -bottom-2 -right-2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-100">
+                                class="absolute -bottom-2 -right-2 w-12 h-12 t-bg-panel rounded-full shadow-lg flex items-center justify-center border t-border-main">
                                 <i class="fas fa-user-shield text-emerald-500"></i>
                             </div>
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">开启云端收藏之旅</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold t-text-main tracking-tight">开启云端收藏之旅</h2>
                         <p class="text-gray-500 mt-4 mb-10 text-center max-w-md leading-relaxed px-6">
                             您的收藏暂时无法同步。请前往设置页面登录，同步您的LX MUSIC歌单，享受跨设备的一致体验。
                         </p>
@@ -708,12 +717,12 @@
                 <!-- Settings View -->
                 <div id="view-settings"
                     class="absolute inset-0 overflow-y-auto custom-scrollbar px-6 pt-6 pb-32 hidden opacity-0 transition-all duration-300">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto w-full">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">设置</h2>
+                    <div class="t-bg-panel rounded-2xl shadow-sm border t-border-main p-8 max-w-2xl mx-auto w-full">
+                        <h2 class="text-2xl font-bold t-text-main mb-6">设置</h2>
 
                         <!-- Settings Tabs -->
                         <div
-                            class="flex border-b border-gray-100 mb-6 overflow-x-auto whitespace-nowrap hide-scrollbar scroll-smooth">
+                            class="flex border-b t-border-main mb-6 overflow-x-auto whitespace-nowrap hide-scrollbar scroll-smooth">
                             <button onclick="switchSettingsTab('system')" id="settings-tab-system"
                                 class="px-6 py-2 text-sm font-medium text-emerald-600 border-b-2 border-emerald-600 transition-colors focus:outline-none flex-shrink-0">
                                 系统 (System)
@@ -749,7 +758,7 @@
                                         <div class="text-xs text-emerald-600 mt-1">支持上传 .js 脚本扩展音源</div>
                                     </div>
                                     <button onclick="openCustomSourceModal()"
-                                        class="flex-shrink-0 px-4 py-2 bg-white text-emerald-600 font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
+                                        class="flex-shrink-0 px-4 py-2 t-bg-panel text-emerald-600 font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                                         管理 / 添加
                                     </button>
                                 </div>
@@ -757,18 +766,18 @@
                                 <!-- 已上传的源列表 (Settings View Mirror) -->
                                 <div id="settings-custom-sources-list" class="space-y-2">
                                     <!-- 列表将在此处渲染 -->
-                                    <div class="text-xs text-gray-400 text-center py-2">暂无数据 (JS未加载)</div>
+                                    <div class="text-xs t-text-muted text-center py-2">暂无数据 (JS未加载)</div>
                                 </div>
 
                                 <!-- 公开源开关 -->
                                 <div
-                                    class="mt-3 flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                    <span class="text-sm text-gray-600 font-medium">启用公开源 (Public List)</span>
+                                    class="mt-3 flex items-center justify-between t-bg-main p-3 rounded-lg border t-border-main">
+                                    <span class="text-sm t-text-muted font-medium">启用公开源 (Public List)</span>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" id="toggle-public-sources" class="sr-only peer"
                                             onchange="togglePublicSourcesSetting()">
                                         <div
-                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                         </div>
                                     </label>
                                 </div>
@@ -777,19 +786,19 @@
                             <div>
                                 <h3 class="font-medium text-emerald-600 mb-3">默认音质 (Default Quality)</h3>
                                 <select id="quality-select" onchange="changeQualityPreference(this.value)"
-                                    class="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                                    class="w-full p-3 border t-border-main rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
                                     <option value="128k">标准 128K (流畅)</option>
                                     <option value="320k" selected>高品质 320K (推荐)</option>
                                     <option value="flac">无损 FLAC</option>
                                     <option value="flac24bit">无损 Hi-Res (最高)</option>
                                 </select>
-                                <p class="text-xs text-gray-400 mt-2">实际播放音质取决于歌曲支持的最高音质，系统会自动降级</p>
+                                <p class="text-xs t-text-muted mt-2">实际播放音质取决于歌曲支持的最高音质，系统会自动降级</p>
                             </div>
 
                             <div>
                                 <h3 class="font-medium text-emerald-600 mb-2">每页显示数量 (Items Per Page)</h3>
                                 <select onchange="changeItemsPerPage(this.value)" id="items-per-page-select"
-                                    class="w-full p-2 border border-gray-200 rounded-lg text-sm">
+                                    class="w-full p-2 border t-border-main rounded-lg text-sm">
                                     <option value="10">10 首/页</option>
                                     <option value="20" selected>20 首/页 (默认)</option>
                                     <option value="50">50 首/页</option>
@@ -802,36 +811,36 @@
                                 <h3 class="font-medium text-emerald-600 mb-2">网络设置 (Network Settings)</h3>
                                 <div class="space-y-3">
                                     <div
-                                        class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <span class="text-sm text-gray-600 font-medium">播放音乐代理 (Proxy Playback)</span>
+                                        class="flex items-center justify-between t-bg-main p-3 rounded-lg border t-border-main">
+                                        <span class="text-sm t-text-muted font-medium">播放音乐代理 (Proxy Playback)</span>
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" id="toggle-proxy-playback" class="sr-only peer"
                                                 onchange="changeProxyPlayback(this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <span class="text-sm text-gray-600 font-medium">下载音乐代理 (Proxy Download)</span>
+                                        class="flex items-center justify-between t-bg-main p-3 rounded-lg border t-border-main">
+                                        <span class="text-sm t-text-muted font-medium">下载音乐代理 (Proxy Download)</span>
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" id="toggle-proxy-download" class="sr-only peer"
                                                 onchange="changeProxyDownload(this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <span class="text-sm text-gray-600 font-medium">自动代理 (Auto Proxy)</span>
+                                        class="flex items-center justify-between t-bg-main p-3 rounded-lg border t-border-main">
+                                        <span class="text-sm t-text-muted font-medium">自动代理 (Auto Proxy)</span>
                                         <label class="relative inline-flex items-center cursor-pointer"
                                             title="仅在 HTTPS 网站获取到 HTTP 链接时自动使用代理">
                                             <input type="checkbox" id="toggle-auto-proxy" class="sr-only peer"
                                                 onchange="changeAutoProxy(this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
@@ -839,22 +848,22 @@
                             </div>
 
                             <!-- Sync Settings Moved inside System Panel -->
-                            <div class="pt-6 border-t border-gray-100">
+                            <div class="pt-6 border-t t-border-main">
                                 <h3 class="font-medium text-emerald-600 mb-4">数据同步 (Sync)</h3>
 
                                 <div class="flex gap-4 mb-4">
                                     <button id="btn-mode-local" onclick="switchSyncMode('local')"
-                                        class="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500 transition-all">本地服务器</button>
+                                        class="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 transition-all">本地服务器</button>
                                     <button id="btn-mode-remote" onclick="switchSyncMode('remote')"
-                                        class="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">远程同歩</button>
+                                        class="px-4 py-2 rounded-lg text-sm font-medium t-bg-track t-text-muted hover:t-bg-item-hover transition-all">远程同歩</button>
                                 </div>
 
                                 <!-- Local Mode Form -->
                                 <div id="sync-form-local" class="space-y-4">
                                     <input type="text" id="sync-local-user" placeholder="用户名 (Username)"
-                                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
+                                        class="w-full px-4 py-2 border t-border-main rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
                                     <input type="password" id="sync-local-pass" placeholder="密码 (Password)"
-                                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
+                                        class="w-full px-4 py-2 border t-border-main rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
                                     <button onclick="handleLocalLogin()"
                                         class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition-colors shadow-md">登录并同步
                                         (Login & Sync)</button>
@@ -866,9 +875,9 @@
 
                                     <!-- Step 1: URL -->
                                     <div id="sync-remote-step1">
-                                        <label class="block text-xs font-bold text-gray-400 mb-1">链接 (URL)</label>
+                                        <label class="block text-xs font-bold t-text-muted mb-1">链接 (URL)</label>
                                         <input type="text" id="sync-remote-url" placeholder="ws://192.168.x.x:xxx"
-                                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm mb-2">
+                                            class="w-full px-4 py-2 border t-border-main rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm mb-2">
                                         <button onclick="handleRemoteStep1()"
                                             class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition-colors shadow-md">
                                             下一步 (Next)
@@ -877,13 +886,13 @@
 
                                     <!-- Step 2: Code (Hidden) -->
                                     <div id="sync-remote-step2" class="hidden">
-                                        <label class="block text-xs font-bold text-gray-400 mb-1">连接码 (Connection
+                                        <label class="block text-xs font-bold t-text-muted mb-1">连接码 (Connection
                                             Code)</label>
                                         <input type="text" id="sync-remote-code" placeholder="输入连接码"
-                                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm mb-2">
+                                            class="w-full px-4 py-2 border t-border-main rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm mb-2">
                                         <div class="flex gap-2">
                                             <button onclick="handleRemoteBack()"
-                                                class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold rounded-lg transition-colors">
+                                                class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 t-text-muted font-bold rounded-lg transition-colors">
                                                 上一步
                                             </button>
                                             <button onclick="handleRemoteConnect()"
@@ -900,66 +909,66 @@
                             </div>
 
                             <!-- Cache & Reset -->
-                            <div class="pt-6 border-t border-gray-100 mb-2">
+                            <div class="pt-6 border-t t-border-main mb-2">
                                 <h3 class="font-medium text-emerald-600 mb-3">本地缓存与重置 (Cache & Reset)</h3>
-                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col gap-3">
+                                <div class="t-bg-main p-4 rounded-xl border t-border-main flex flex-col gap-3">
 
                                     <!-- Cache Toggles -->
-                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                    <div class="flex items-center justify-between pb-3 border-b t-border-main">
                                         <div>
-                                            <div class="text-sm font-bold text-gray-700">缓存歌词 (Cache Lyrics)</div>
-                                            <div class="text-xs text-gray-400">本地缓存歌词、翻译及罗马音，减少网络请求</div>
+                                            <div class="text-sm font-bold t-text-main">缓存歌词 (Cache Lyrics)</div>
+                                            <div class="text-xs t-text-muted">本地缓存歌词、翻译及罗马音，减少网络请求</div>
                                         </div>
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" id="setting-enable-lyric-cache" class="sr-only peer"
                                                 onchange="updateSetting('enableLyricCache', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
 
-                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                    <div class="flex items-center justify-between pb-3 border-b t-border-main">
                                         <div>
-                                            <div class="text-sm font-bold text-gray-700">缓存歌曲链接 (Cache Song URL)</div>
-                                            <div class="text-xs text-gray-400">优先播放缓存链接，失败时自动刷新</div>
+                                            <div class="text-sm font-bold t-text-main">缓存歌曲链接 (Cache Song URL)</div>
+                                            <div class="text-xs t-text-muted">优先播放缓存链接，失败时自动刷新</div>
                                         </div>
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" id="setting-enable-url-cache" class="sr-only peer"
                                                 onchange="updateSetting('enableSongUrlCache', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
 
                                     <!-- Server Cache Settings -->
-                                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                                    <div class="flex items-center justify-between pb-3 border-b t-border-main">
                                         <div>
-                                            <div class="text-sm font-bold text-gray-700">缓存歌曲文件 (Cache Song File)</div>
-                                            <div class="text-xs text-gray-400">下载并缓存歌曲文件到服务器，优先播放本地缓存</div>
+                                            <div class="text-sm font-bold t-text-main">缓存歌曲文件 (Cache Song File)</div>
+                                            <div class="text-xs t-text-muted">下载并缓存歌曲文件到服务器，优先播放本地缓存</div>
                                         </div>
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" id="setting-enable-server-cache" class="sr-only peer"
                                                 onchange="updateSetting('enableServerCache', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
 
                                     <!-- Cache Location Setting -->
-                                    <div class="pb-3 border-b border-gray-200">
+                                    <div class="pb-3 border-b t-border-main">
                                         <div class="flex items-center justify-between mb-2">
                                             <div>
-                                                <div class="text-sm font-bold text-gray-700">缓存歌曲位置 (Cache Location)
+                                                <div class="text-sm font-bold t-text-main">缓存歌曲位置 (Cache Location)
                                                 </div>
-                                                <div class="text-xs text-gray-400">选择文件存储位置</div>
+                                                <div class="text-xs t-text-muted">选择文件存储位置</div>
                                             </div>
                                         </div>
                                         <select id="setting-server-cache-location"
                                             onchange="updateSetting('serverCacheLocation', this.value); updateServerCacheConfig(this.value)"
-                                            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block p-2.5">
+                                            class="w-full t-bg-main border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block p-2.5">
                                             <option value="data">DATA_PATH (WebDAV同步)</option>
                                             <option value="root">运行目录 (仅本地)</option>
                                         </select>
@@ -974,8 +983,8 @@
                                     <!-- Storage Info -->
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700">浏览器存储占用</span>
-                                            <span class="text-xs text-gray-400">当前 localStorage 已使用空间</span>
+                                            <span class="text-sm font-bold t-text-main">浏览器存储占用</span>
+                                            <span class="text-xs t-text-muted">当前 localStorage 已使用空间</span>
                                         </div>
                                         <span id="storage-usage-info"
                                             class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">0
@@ -985,8 +994,8 @@
                                     <!-- Server Cache Info -->
                                     <div class="flex items-center justify-between">
                                         <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700">服务器缓存占用</span>
-                                            <span class="text-xs text-gray-400">已缓存的歌曲文件大小</span>
+                                            <span class="text-sm font-bold t-text-main">服务器缓存占用</span>
+                                            <span class="text-xs t-text-muted">已缓存的歌曲文件大小</span>
                                         </div>
                                         <span id="server-cache-info"
                                             class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">计算中...</span>
@@ -995,19 +1004,19 @@
                                     <!-- Action Buttons -->
                                     <div class="grid grid-cols-2 gap-3">
                                         <button onclick="clearCache('lyric')"
-                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
+                                            class="py-2 px-3 t-bg-panel border t-border-main t-text-muted hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
                                             <i class="fas fa-trash-alt mr-1"></i> 清除歌词缓存
                                         </button>
                                         <button onclick="clearCache('url')"
-                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
+                                            class="py-2 px-3 t-bg-panel border t-border-main t-text-muted hover:text-emerald-600 hover:border-emerald-200 rounded-lg text-xs font-bold transition-colors">
                                             <i class="fas fa-link mr-1"></i> 清除链接缓存
                                         </button>
                                         <button onclick="updateServerCacheSize()"
-                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-xs font-bold transition-colors">
+                                            class="py-2 px-3 t-bg-panel border t-border-main t-text-muted hover:text-blue-600 hover:border-blue-200 rounded-lg text-xs font-bold transition-colors">
                                             <i class="fas fa-sync-alt mr-1"></i> 刷新缓存统计
                                         </button>
                                         <button onclick="clearServerCache()"
-                                            class="py-2 px-3 bg-white border border-gray-200 text-gray-600 hover:text-red-600 hover:border-red-200 rounded-lg text-xs font-bold transition-colors">
+                                            class="py-2 px-3 t-bg-panel border t-border-main t-text-muted hover:text-red-600 hover:border-red-200 rounded-lg text-xs font-bold transition-colors">
                                             <i class="fas fa-server mr-1"></i> 清除服务器缓存
                                         </button>
                                     </div>
@@ -1025,27 +1034,27 @@
                         <div id="settings-panel-display" class="hidden space-y-8 animate-fade-in">
                             <!-- Appearance Selection -->
                             <div>
-                                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center">
+                                <h3 class="font-bold t-text-main text-lg mb-4 flex items-center">
                                     <i class="fas fa-magic mr-2 text-emerald-500"></i> 外观设置 (Appearance)
                                 </h3>
                                 <div class="grid grid-cols-3 gap-4">
                                     <!-- Light -->
                                     <button onclick="setAppearance('light')"
-                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all ring-2 ring-transparent"
+                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border t-border-main hover:t-bg-main transition-all ring-2 ring-transparent"
                                         data-appearance="light">
                                         <i class="fas fa-sun text-xl"></i>
                                         <span class="text-xs font-bold">明亮模式</span>
                                     </button>
                                     <!-- Dark -->
                                     <button onclick="setAppearance('dark')"
-                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all ring-2 ring-transparent"
+                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border t-border-main hover:t-bg-main transition-all ring-2 ring-transparent"
                                         data-appearance="dark">
                                         <i class="fas fa-moon text-xl"></i>
                                         <span class="text-xs font-bold">暗黑模式</span>
                                     </button>
                                     <!-- System -->
                                     <button onclick="setAppearance('system')"
-                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all ring-2 ring-transparent"
+                                        class="appearance-option flex flex-col items-center gap-2 p-3 rounded-xl border t-border-main hover:t-bg-main transition-all ring-2 ring-transparent"
                                         data-appearance="system">
                                         <i class="fas fa-desktop text-xl"></i>
                                         <span class="text-xs font-bold">跟随系统</span>
@@ -1055,99 +1064,99 @@
 
                             <!-- Theme Selection -->
                             <div>
-                                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center">
+                                <h3 class="font-bold t-text-main text-lg mb-4 flex items-center">
                                     <i class="fas fa-palette mr-2 text-emerald-500"></i> 主题风格 (Theme)
                                 </h3>
                                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                                     <!-- Emerald -->
                                     <button onclick="setTheme('emerald')"
-                                        class="theme-option group relative rounded-xl border border-gray-200 p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-emerald-500"
+                                        class="theme-option group relative rounded-xl border t-border-main p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-emerald-500"
                                         data-theme="emerald">
                                         <div
                                             class="h-24 rounded-lg bg-gradient-to-br from-[#34d399] to-[#059669] mb-3 shadow-inner relative overflow-hidden">
                                             <div
-                                                class="absolute inset-0 bg-white/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
+                                                class="absolute inset-0 t-bg-panel/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
                                             </div>
                                             <i
                                                 class="fas fa-check-circle absolute top-2 right-2 text-white/90 opacity-0 group-data-[active=true]:opacity-100 transition-opacity"></i>
                                         </div>
-                                        <div class="font-bold text-gray-700 text-sm text-center">森之韵</div>
-                                        <div class="text-xs text-center text-gray-400 scale-90">Emerald</div>
+                                        <div class="font-bold t-text-main text-sm text-center">森之韵</div>
+                                        <div class="text-xs text-center t-text-muted scale-90">Emerald</div>
                                     </button>
                                     <!-- Blue -->
                                     <button onclick="setTheme('blue')"
-                                        class="theme-option group relative rounded-xl border border-gray-200 p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-blue-500"
+                                        class="theme-option group relative rounded-xl border t-border-main p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-blue-500"
                                         data-theme="blue">
                                         <div
                                             class="h-24 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 mb-3 shadow-inner relative overflow-hidden">
                                             <div
-                                                class="absolute inset-0 bg-white/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
+                                                class="absolute inset-0 t-bg-panel/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
                                             </div>
                                             <i
                                                 class="fas fa-check-circle absolute top-2 right-2 text-white/90 opacity-0 group-data-[active=true]:opacity-100 transition-opacity"></i>
                                         </div>
-                                        <div class="font-bold text-gray-700 text-sm text-center">深海谧</div>
-                                        <div class="text-xs text-center text-gray-400 scale-90">Deep Blue</div>
+                                        <div class="font-bold t-text-main text-sm text-center">深海谧</div>
+                                        <div class="text-xs text-center t-text-muted scale-90">Deep Blue</div>
                                     </button>
                                     <!-- Amber -->
                                     <button onclick="setTheme('amber')"
-                                        class="theme-option group relative rounded-xl border border-gray-200 p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-amber-500"
+                                        class="theme-option group relative rounded-xl border t-border-main p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-amber-500"
                                         data-theme="amber">
                                         <div
                                             class="h-24 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 mb-3 shadow-inner relative overflow-hidden">
                                             <div
-                                                class="absolute inset-0 bg-white/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
+                                                class="absolute inset-0 t-bg-panel/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
                                             </div>
                                             <i
                                                 class="fas fa-check-circle absolute top-2 right-2 text-white/90 opacity-0 group-data-[active=true]:opacity-100 transition-opacity"></i>
                                         </div>
-                                        <div class="font-bold text-gray-700 text-sm text-center">暖阳愿</div>
-                                        <div class="text-xs text-center text-gray-400 scale-90">Warm Sun</div>
+                                        <div class="font-bold t-text-main text-sm text-center">暖阳愿</div>
+                                        <div class="text-xs text-center t-text-muted scale-90">Warm Sun</div>
                                     </button>
                                     <!-- Violet -->
                                     <button onclick="setTheme('violet')"
-                                        class="theme-option group relative rounded-xl border border-gray-200 p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-violet-500"
+                                        class="theme-option group relative rounded-xl border t-border-main p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-violet-500"
                                         data-theme="violet">
                                         <div
                                             class="h-24 rounded-lg bg-gradient-to-br from-violet-400 to-purple-600 mb-3 shadow-inner relative overflow-hidden">
                                             <div
-                                                class="absolute inset-0 bg-white/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
+                                                class="absolute inset-0 t-bg-panel/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
                                             </div>
                                             <i
                                                 class="fas fa-check-circle absolute top-2 right-2 text-white/90 opacity-0 group-data-[active=true]:opacity-100 transition-opacity"></i>
                                         </div>
-                                        <div class="font-bold text-gray-700 text-sm text-center">紫微星</div>
-                                        <div class="text-xs text-center text-gray-400 scale-90">Nebula</div>
+                                        <div class="font-bold t-text-main text-sm text-center">紫微星</div>
+                                        <div class="text-xs text-center t-text-muted scale-90">Nebula</div>
                                     </button>
                                     <!-- Rose -->
                                     <button onclick="setTheme('rose')"
-                                        class="theme-option group relative rounded-xl border border-gray-200 p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-rose-500"
+                                        class="theme-option group relative rounded-xl border t-border-main p-2 hover:shadow-md transition-all text-left overflow-hidden ring-2 ring-transparent ring-offset-2 data-[active=true]:ring-rose-500"
                                         data-theme="rose">
                                         <div
                                             class="h-24 rounded-lg bg-gradient-to-br from-rose-400 to-red-500 mb-3 shadow-inner relative overflow-hidden">
                                             <div
-                                                class="absolute inset-0 bg-white/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
+                                                class="absolute inset-0 t-bg-panel/20 transform rotate-12 scale-150 translate-y-10 group-hover:translate-y-8 transition-transform">
                                             </div>
                                             <i
                                                 class="fas fa-check-circle absolute top-2 right-2 text-white/90 opacity-0 group-data-[active=true]:opacity-100 transition-opacity"></i>
                                         </div>
-                                        <div class="font-bold text-gray-700 text-sm text-center">绯红月</div>
-                                        <div class="text-xs text-center text-gray-400 scale-90">Crimson</div>
+                                        <div class="font-bold t-text-main text-sm text-center">绯红月</div>
+                                        <div class="text-xs text-center t-text-muted scale-90">Crimson</div>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Interface Settings -->
-                            <div class="pt-4 border-t border-gray-100">
-                                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center">
+                            <div class="pt-4 border-t t-border-main">
+                                <h3 class="font-bold t-text-main text-lg mb-4 flex items-center">
                                     <i class="fas fa-desktop mr-2 text-emerald-500"></i> 界面设置 (Interface)
                                 </h3>
 
                                 <div class="space-y-4">
                                     <!-- Hot Search Limit -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
-                                        <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
+                                        <h3 class="font-bold t-text-main text-sm mb-3 flex items-center">
                                             <i class="fas fa-list-ol mr-2 text-emerald-500"></i> 热搜显示数量 (Hot Search
                                             Limit)
                                         </h3>
@@ -1158,7 +1167,7 @@
                                             </div>
                                             <div class="w-full md:w-24">
                                                 <input type="number" id="hot-search-limit-input"
-                                                    class="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all"
+                                                    class="w-full px-3 py-1.5 border t-border-main rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all"
                                                     value="20" min="0" max="50"
                                                     onchange="changeHotSearchLimit(this.value)">
                                             </div>
@@ -1167,8 +1176,8 @@
 
                                     <!-- Lyric Font Size -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
-                                        <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
+                                        <h3 class="font-bold t-text-main text-sm mb-3 flex items-center">
                                             <i class="fas fa-font mr-2 text-emerald-500"></i> 歌词字体大小 (Lyric Font Size)
                                         </h3>
                                         <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -1177,7 +1186,7 @@
                                             </div>
                                             <div class="flex items-center gap-3 w-full md:w-40">
                                                 <input type="range" id="lyric-font-size-slider"
-                                                    class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                                                    class="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                                                     min="0.8" max="3.0" step="0.1" value="1.2"
                                                     oninput="changeLyricFontSize(this.value)">
                                                 <span id="lyric-font-size-value"
@@ -1188,8 +1197,8 @@
 
                                     <!-- Lyric Font Family -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
-                                        <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
+                                        <h3 class="font-bold t-text-main text-sm mb-3 flex items-center">
                                             <i class="fas fa-font mr-2 text-emerald-500"></i> 歌词字体 (Lyric Font Family)
                                         </h3>
                                         <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -1199,7 +1208,7 @@
                                             <div class="flex items-center gap-3 w-full md:w-64">
                                                 <div class="relative flex-1">
                                                     <select id="lyric-font-family-select"
-                                                        class="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all appearance-none bg-white pr-8"
+                                                        class="w-full px-3 py-1.5 border t-border-main rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all appearance-none t-bg-panel pr-8"
                                                         onchange="changeLyricFontFamily(this.value)">
                                                         <option value="">默认字体</option>
                                                         <optgroup label="常用中文字体">
@@ -1218,12 +1227,12 @@
                                                         </optgroup>
                                                     </select>
                                                     <div
-                                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 t-text-main">
                                                         <i class="fas fa-chevron-down text-xs"></i>
                                                     </div>
                                                 </div>
                                                 <button onclick="loadLocalFonts()"
-                                                    class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-xs transition-colors whitespace-nowrap"
+                                                    class="px-3 py-1.5 t-bg-track hover:bg-gray-200 t-text-muted rounded-lg text-xs transition-colors whitespace-nowrap"
                                                     title="尝试读取系统安装的所有字体 (需要浏览器支持)">
                                                     <i class="fas fa-sync-alt mr-1"></i>读取
                                                 </button>
@@ -1231,18 +1240,18 @@
                                         </div>
                                         <!-- Font Preview Panel -->
                                         <div
-                                            class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 text-center transition-all duration-300">
-                                            <div class="text-xs text-gray-400 mb-2">字体预览 (Preview)</div>
+                                            class="mt-4 p-4 t-bg-main rounded-lg border t-border-main text-center transition-all duration-300">
+                                            <div class="text-xs t-text-muted mb-2">字体预览 (Preview)</div>
                                             <div id="lyric-font-preview"
                                                 style="font-family: var(--lyric-font-family, inherit);">
                                                 <div
-                                                    class="text-xl font-bold text-gray-800 break-words tracking-widest mb-2">
+                                                    class="text-xl font-bold t-text-main break-words tracking-widest mb-2">
                                                     0123456789
                                                 </div>
-                                                <div class="text-lg text-gray-700 break-words mb-2">
+                                                <div class="text-lg t-text-main break-words mb-2">
                                                     The Quick Brown Fox Jumps Over The Lazy Dog
                                                 </div>
-                                                <div class="text-2xl font-medium text-gray-800 break-words">
+                                                <div class="text-2xl font-medium t-text-main break-words">
                                                     落霞与孤鹜齐飞，秋水共长天一色
                                                 </div>
                                             </div>
@@ -1251,15 +1260,15 @@
 
                                     <!-- Sidebar Info Toggle -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">展示侧边栏封面/标题 (Sidebar Info)
+                                                <h4 class="text-sm font-bold t-text-main">展示侧边栏封面/标题 (Sidebar Info)
                                                 </h4>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <p class="text-xs t-text-muted mt-1">
                                                     屏幕太窄时自动隐藏
                                                 </p>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <p class="text-xs t-text-muted mt-1">
                                                     是否在屏幕左下角展示当前播放歌曲的封面和名称 (仅在电脑版生效)。
                                                 </p>
                                             </div>
@@ -1268,7 +1277,7 @@
                                                     class="sr-only peer"
                                                     onchange="updateSetting('showSidebarSongInfo', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
@@ -1276,11 +1285,11 @@
 
                                     <!-- Lyric Glow Toggle -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">歌词荧光效果 (Lyric Glow)</h4>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <h4 class="text-sm font-bold t-text-main">歌词荧光效果 (Lyric Glow)</h4>
+                                                <p class="text-xs t-text-muted mt-1">
                                                     为当前播放的歌词添加荧光发光效果。
                                                 </p>
                                             </div>
@@ -1289,7 +1298,7 @@
                                                     class="sr-only peer"
                                                     onchange="updateSetting('enableLyricGlow', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
@@ -1297,12 +1306,12 @@
 
                                     <!-- Lyric Translation Toggle -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">显示歌词翻译 (Show Translation)
+                                                <h4 class="text-sm font-bold t-text-main">显示歌词翻译 (Show Translation)
                                                 </h4>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <p class="text-xs t-text-muted mt-1">
                                                     如果歌曲有翻译，则在原词下方显示。
                                                 </p>
                                             </div>
@@ -1311,7 +1320,7 @@
                                                     class="sr-only peer"
                                                     onchange="updateSetting('showLyricTranslation', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
@@ -1319,12 +1328,12 @@
 
                                     <!-- Lyric Roma Toggle -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">显示歌词罗马音 (Show Romanization)
+                                                <h4 class="text-sm font-bold t-text-main">显示歌词罗马音 (Show Romanization)
                                                 </h4>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <p class="text-xs t-text-muted mt-1">
                                                     如果歌曲有罗马音，则在原词下方显示。
                                                 </p>
                                             </div>
@@ -1332,7 +1341,7 @@
                                                 <input type="checkbox" id="setting-show-lyric-roma" class="sr-only peer"
                                                     onchange="updateSetting('showLyricRoma', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
@@ -1340,14 +1349,14 @@
 
                                     <!-- Swap Trans Roma Toggle -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">交换翻译与罗马音位置 (Swap Translation
+                                                <h4 class="text-sm font-bold t-text-main">交换翻译与罗马音位置 (Swap Translation
                                                     &
                                                     Roma)
                                                 </h4>
-                                                <p class="text-xs text-gray-400 mt-1">
+                                                <p class="text-xs t-text-muted mt-1">
                                                     开启后，罗马音将显示在翻译上方。
                                                 </p>
                                             </div>
@@ -1356,7 +1365,7 @@
                                                     class="sr-only peer"
                                                     onchange="updateSetting('swapLyricTransRoma', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
@@ -1365,36 +1374,36 @@
                             </div>
 
                             <!-- Visual Effects Settings -->
-                            <div class="pt-4 border-t border-gray-100">
-                                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center">
+                            <div class="pt-4 border-t t-border-main">
+                                <h3 class="font-bold t-text-main text-lg mb-4 flex items-center">
                                     <i class="fas fa-wave-square mr-2 text-emerald-500"></i> 视觉特效 (Visual Effects)
                                 </h3>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Footer Visualizer -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow space-y-4">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow space-y-4">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">底部播放栏 (Footer)</h4>
-                                                <p class="text-xs text-gray-400 mt-1">控制播放栏上方的波形。</p>
+                                                <h4 class="text-sm font-bold t-text-main">底部播放栏 (Footer)</h4>
+                                                <p class="text-xs t-text-muted mt-1">控制播放栏上方的波形。</p>
                                             </div>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" id="setting-show-footer-visualizer"
                                                     class="sr-only peer"
                                                     onchange="updateSetting('showFooterVisualizer', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
                                         <div>
                                             <label
-                                                class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider">显示样式
+                                                class="block text-[10px] font-bold t-text-muted mb-2 uppercase tracking-wider">显示样式
                                                 (Style)</label>
                                             <select id="setting-footer-visualizer-style"
                                                 onchange="updateSetting('footerVisualizerStyle', this.value)"
-                                                class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                                                class="w-full p-2 t-bg-main border t-border-main rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
                                                 <option value="bars">条形阵列 (Bars)</option>
                                                 <option value="wave">平滑波浪 (Wave)</option>
                                             </select>
@@ -1403,28 +1412,28 @@
 
                                     <!-- Detail Visualizer -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow space-y-4">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow space-y-4">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <h4 class="text-sm font-bold text-gray-800">详情页背景 (Detail)</h4>
-                                                <p class="text-xs text-gray-400 mt-1">全屏模式下的背景特效。</p>
+                                                <h4 class="text-sm font-bold t-text-main">详情页背景 (Detail)</h4>
+                                                <p class="text-xs t-text-muted mt-1">全屏模式下的背景特效。</p>
                                             </div>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" id="setting-show-detail-visualizer"
                                                     class="sr-only peer"
                                                     onchange="updateSetting('showDetailVisualizer', this.checked)">
                                                 <div
-                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                                 </div>
                                             </label>
                                         </div>
                                         <div class="pt-2 border-t border-gray-50">
                                             <label
-                                                class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider">显示样式
+                                                class="block text-[10px] font-bold t-text-muted mb-2 uppercase tracking-wider">显示样式
                                                 (Style)</label>
                                             <select id="setting-detail-visualizer-style"
                                                 onchange="updateSetting('detailVisualizerStyle', this.value)"
-                                                class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                                                class="w-full p-2 t-bg-main border t-border-main rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
                                                 <option value="pulse">频率脉冲 (Pulse)</option>
                                                 <option value="dots">点阵频谱 (Dots)</option>
                                                 <option value="flower">灵动莲花 (Flower)</option>
@@ -1437,13 +1446,13 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                                     <!-- Global Opacity -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <label
                                             class="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">全局透明度
                                             (Opacity)</label>
                                         <div class="flex items-center gap-4">
                                             <input type="range" id="setting-visualizer-opacity"
-                                                class="flex-1 h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                                                class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                                                 min="0.1" max="1.0" step="0.1" value="0.5"
                                                 oninput="updateSetting('visualizerOpacity', parseFloat(this.value))">
                                             <span id="visualizer-opacity-value"
@@ -1453,17 +1462,17 @@
 
                                     <!-- Global Style (Blocks vs Connected) -->
                                     <div
-                                        class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                        class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                         <label
                                             class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">渲染风格
                                             (Global Style)</label>
                                         <select id="setting-visualizer-global-style"
                                             onchange="updateSetting('visualizerGlobalStyle', this.value)"
-                                            class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                                            class="w-full p-2 t-bg-main border t-border-main rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
                                             <option value="blocks">方块样式 (Blocks)</option>
                                             <option value="connected">连体样式 (Connected)</option>
                                         </select>
-                                        <p class="text-[10px] text-gray-400 mt-2 italic">※ 此风格主要影响条形阵列和频率脉冲效果。</p>
+                                        <p class="text-[10px] t-text-muted mt-2 italic">※ 此风格主要影响条形阵列和频率脉冲效果。</p>
                                     </div>
                                 </div>
                             </div>
@@ -1472,17 +1481,17 @@
                         <!-- Logic Settings Panel -->
                         <div id="settings-panel-logic" class="hidden space-y-6 animate-fade-in">
                             <div>
-                                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center">
+                                <h3 class="font-bold t-text-main text-lg mb-4 flex items-center">
                                     <i class="fas fa-microchip mr-2 text-emerald-500"></i> 播放逻辑 (Playback Logic)
                                 </h3>
                                 <!-- Change Playlist on Search Play -->
                                 <div
-                                    class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                    class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <h4 class="text-sm font-bold text-gray-800">播放搜索歌曲时切换歌单 (Switch Play
+                                            <h4 class="text-sm font-bold t-text-main">播放搜索歌曲时切换歌单 (Switch Play
                                                 Context)</h4>
-                                            <p class="text-xs text-gray-400 mt-1">
+                                            <p class="text-xs t-text-muted mt-1">
                                                 开启：播放搜索出的歌曲后，播放列表切换为搜索结果。<br>
                                                 关闭：播放搜索出的歌曲后，播放列表切换为默认列表。<br>
                                                 <span class="text-emerald-500 select-none font-medium">*
@@ -1494,7 +1503,7 @@
                                                 class="sr-only peer"
                                                 onchange="updateSetting('switchPlaylistOnSearchPlay', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
@@ -1502,11 +1511,11 @@
 
                                 <!-- Auto Resume -->
                                 <div
-                                    class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                    class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <h4 class="text-sm font-bold text-gray-800">自动恢复进度 (Auto-Resume)</h4>
-                                            <p class="text-xs text-gray-400 mt-1">
+                                            <h4 class="text-sm font-bold t-text-main">自动恢复进度 (Auto-Resume)</h4>
+                                            <p class="text-xs t-text-muted mt-1">
                                                 自动恢复最后播放的歌曲、进度及列表。<br>
                                                 <span class="text-emerald-500 select-none font-medium">*
                                                     提示：会自动跳转到上次对应的歌单选项卡</span>
@@ -1516,7 +1525,7 @@
                                             <input type="checkbox" id="setting-auto-resume" class="sr-only peer"
                                                 onchange="updateSetting('autoResume', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
@@ -1524,11 +1533,11 @@
 
                                 <!-- Audio Crossfade -->
                                 <div
-                                    class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                    class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <h4 class="text-sm font-bold text-gray-800">音频淡入淡出 (Crossfade)</h4>
-                                            <p class="text-xs text-gray-400 mt-1">
+                                            <h4 class="text-sm font-bold t-text-main">音频淡入淡出 (Crossfade)</h4>
+                                            <p class="text-xs t-text-muted mt-1">
                                                 切换歌曲时，音量平滑淡出和淡入，减少切换的突兀感。
                                             </p>
                                         </div>
@@ -1536,7 +1545,7 @@
                                             <input type="checkbox" id="setting-enable-crossfade" class="sr-only peer"
                                                 onchange="updateSetting('enableCrossfade', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
@@ -1544,11 +1553,11 @@
 
                                 <!-- Keyboard Shortcuts -->
                                 <div
-                                    class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
+                                    class="t-bg-panel rounded-xl border t-border-main p-4 hover:shadow-sm transition-shadow">
                                     <div class="flex items-center justify-between mb-4">
                                         <div>
-                                            <h4 class="text-sm font-bold text-gray-800">按键快捷方式 (Keyboard Shortcuts)</h4>
-                                            <p class="text-xs text-gray-400 mt-1">
+                                            <h4 class="text-sm font-bold t-text-main">按键快捷方式 (Keyboard Shortcuts)</h4>
+                                            <p class="text-xs t-text-muted mt-1">
                                                 启用后可使用键盘控制播放。
                                             </p>
                                         </div>
@@ -1556,45 +1565,45 @@
                                             <input type="checkbox" id="setting-enable-shortcuts" class="sr-only peer"
                                                 onchange="updateSetting('enableKeyboardShortcuts', this.checked)">
                                             <div
-                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 transition-all">
                                             </div>
                                         </label>
                                     </div>
                                     <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[10px] text-gray-500 border-t border-gray-50 pt-3">
+                                        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[10px] t-text-muted border-t t-border-main pt-3">
                                         <div class="flex justify-between items-center"><span>播放/暂停 (Play/Pause)</span>
                                             <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">Space</span>
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">Space</span>
                                         </div>
                                         <div class="flex justify-between items-center"><span>上一曲/下一曲 (Prev/Next)</span>
                                             <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">[
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">[
                                                 / ]</span>
                                         </div>
                                         <div class="flex justify-between items-center"><span>音量加/减 (Volume)</span> <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">↑
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">↑
                                                 / ↓</span></div>
                                         <div class="flex justify-between items-center"><span>快进/后退 (Seek)</span>
                                             <div class="flex flex-col items-end"><span
-                                                    class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">→
+                                                    class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">→
                                                     / ←</span><span class="text-[8px] text-emerald-500/60 mt-0.5">Hold
                                                     for smooth seek</span></div>
                                         </div>
                                         <div class="flex justify-between items-center"><span>切换页签 (Switch Tab)</span>
                                             <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">Alt
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">Alt
                                                 + 1-4</span>
                                         </div>
                                         <div class="flex justify-between items-center"><span>歌词页开关 (Lyrics)</span> <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">L</span>
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">L</span>
                                         </div>
                                         <div class="flex justify-between items-center"><span>显示底部波形 (Visualizer)</span>
                                             <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">F</span>
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">F</span>
                                         </div>
                                         <div class="flex justify-between items-center"><span>显示详情波形 (Detail Vis)</span>
                                             <span
-                                                class="bg-gray-100 px-2 py-0.5 rounded-md font-mono border border-gray-200">G</span>
+                                                class="t-bg-track px-2 py-0.5 rounded-md font-mono border t-border-main">G</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1604,12 +1613,12 @@
                         <!-- Logs Settings Panel -->
                         <div id="settings-panel-logs" class="hidden space-y-6 animate-fade-in h-96 flex flex-col">
                             <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                                <h3 class="font-bold text-gray-800 text-lg flex items-center">
+                                <h3 class="font-bold t-text-main text-lg flex items-center">
                                     <i class="fas fa-terminal mr-2 text-emerald-500"></i> 系统日志 (System Logs)
                                 </h3>
                                 <div class="flex gap-2 flex-shrink-0">
                                     <button onclick="window.clearSystemLogs && window.clearSystemLogs()"
-                                        class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-xs transition-colors whitespace-nowrap"
+                                        class="px-3 py-1.5 t-bg-track hover:bg-gray-200 t-text-muted rounded-lg text-xs transition-colors whitespace-nowrap"
                                         title="清空日志">
                                         <i class="fas fa-trash-alt mr-1"></i>清空
                                     </button>
@@ -1628,7 +1637,7 @@
                                     <div class="text-gray-500 italic text-center py-4">暂无日志...</div>
                                 </div>
                             </div>
-                            <div class="text-[10px] text-gray-400 text-right">
+                            <div class="text-[10px] t-text-muted text-right">
                                 * 显示系统启动后的 Console 输出
                             </div>
                         </div>
@@ -1638,7 +1647,7 @@
                 <div id="view-about"
                     class="absolute inset-0 overflow-y-auto custom-scrollbar px-6 pt-6 pb-32 hidden opacity-0 transition-all duration-300">
                     <div
-                        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-3xl mx-auto w-full prose prose-emerald">
+                        class="t-bg-panel rounded-2xl shadow-sm border t-border-main p-8 max-w-3xl mx-auto w-full prose prose-emerald">
                         <div id="about-content" class="animate-pulse">
                             <div class="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
                             <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
@@ -1647,13 +1656,13 @@
                         </div>
 
                         <!-- Check for Updates Button -->
-                        <div class="mt-8 pt-8 border-t border-gray-100 flex flex-col items-center gap-4">
+                        <div class="mt-8 pt-8 border-t t-border-main flex flex-col items-center gap-4">
                             <button onclick="checkForUpdates()"
                                 class="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl shadow-lg shadow-emerald-100 transition-all hover:scale-105 active:scale-95 text-sm font-bold group">
                                 <i class="fas fa-sync-alt group-hover:rotate-180 transition-transform duration-500"></i>
                                 检查版本更新
                             </button>
-                            <p class="text-xs text-gray-400">点击通过云端检查是否有新版本可用</p>
+                            <p class="text-xs t-text-muted">点击通过云端检查是否有新版本可用</p>
                         </div>
                     </div>
                 </div>
@@ -1666,12 +1675,12 @@
 
     <!-- Player Detail View (Overlay) -->
     <div id="view-player-detail"
-        class="fixed inset-0 z-30 bg-white hidden flex flex-col transition-all duration-500 transform translate-y-[100%] opacity-0 pb-24">
+        class="fixed inset-0 z-30 t-bg-panel hidden flex flex-col transition-all duration-500 transform translate-y-[100%] opacity-0 pb-24">
         <!-- Blurry Background -->
         <div class="absolute inset-0 overflow-hidden">
             <img id="detail-bg-cover" src=""
                 class="w-full h-full object-cover filter blur-[60px] opacity-40 scale-125 transition-opacity duration-1000">
-            <div class="absolute inset-0 bg-white/30 backdrop-blur-3xl"></div>
+            <div class="absolute inset-0 t-bg-panel/30 backdrop-blur-3xl"></div>
             <!-- Detail Visualizer Canvas (Raised to avoid being blocked by footer) -->
             <canvas id="detail-visualizer"
                 class="absolute bottom-24 left-0 w-full h-[calc(100vh-6rem)] pointer-events-none opacity-30"></canvas>
@@ -1681,7 +1690,7 @@
         <div
             class="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-6 h-20 pointer-events-none transition-all duration-300 [@media(max-height:500px)]:opacity-0 [@media(max-height:500px)]:pointer-events-none">
             <button onclick="toggleLyrics()" id="btn-toggle-lyrics"
-                class="pointer-events-auto text-gray-600 hover:text-emerald-600 bg-white/40 hover:bg-white/80 rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-sm backdrop-blur-md">
+                class="pointer-events-auto t-text-muted hover:text-emerald-600 t-bg-panel/40 hover:t-bg-panel/80 rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-sm backdrop-blur-md">
                 <i class="fas fa-chevron-down text-lg"></i>
             </button>
             <div class="flex-col items-center hidden md:flex">
@@ -1696,7 +1705,7 @@
 
             <!-- Left: Image -->
             <div id="mobile-player-cover-container"
-                class="w-auto h-auto max-w-[48vw] max-h-[32vh] [@media(max-height:500px)]:max-h-[40vh] aspect-square md:w-[28rem] md:h-[28rem] md:max-w-none md:max-h-none flex-shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-3xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] border-4 border-white/20 origin-top bg-gray-100">
+                class="w-auto h-auto max-w-[48vw] max-h-[32vh] [@media(max-height:500px)]:max-h-[40vh] aspect-square md:w-[28rem] md:h-[28rem] md:max-w-none md:max-h-none flex-shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-3xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] border-4 border-white/20 origin-top t-bg-track">
                 <img id="detail-cover" src="/music/assets/logo.svg" onerror="this.src='/music/assets/logo.svg'"
                     class="w-full h-full object-cover">
             </div>
@@ -1709,11 +1718,11 @@
                     onclick="toggleDetailCover()" title="点击切换封面显示">
                     <div id="detail-title-container" class="w-full overflow-hidden whitespace-nowrap mb-1">
                         <div id="detail-title"
-                            class="inline-block text-2xl md:text-4xl font-black text-gray-800 drop-shadow-sm min-w-full">
+                            class="inline-block text-2xl md:text-4xl font-black t-text-main drop-shadow-sm min-w-full">
                             Song Name
                         </div>
                     </div>
-                    <div id="detail-artist" class="text-base md:text-xl text-gray-600 font-medium truncate">Artist</div>
+                    <div id="detail-artist" class="text-base md:text-xl t-text-muted font-medium truncate">Artist</div>
                     <div id="toggle-hint"
                         class="md:hidden text-[10px] text-emerald-500/60 mt-2 font-mono tracking-widest opacity-80 transition-all duration-1000 overflow-hidden max-h-8">
                         <i class="fas fa-chevron-up text-xs animate-bounce mr-1"></i>点击标题切换封面
@@ -1741,7 +1750,7 @@
                     <div id="lyric-content"
                         class="flex flex-col items-center md:items-start text-center md:text-left gap-3 md:gap-6 py-[40vh] transition-transform duration-300 ease-out">
                         <!-- Lines injected here -->
-                        <p class="text-gray-400 text-lg font-medium">暂无歌词</p>
+                        <p class="t-text-muted text-lg font-medium">暂无歌词</p>
                     </div>
                 </div>
             </div>
@@ -1750,7 +1759,7 @@
 
     <!-- Player Bar -->
     <footer id="player-footer"
-        class="fixed bottom-0 left-0 w-full h-auto md:h-24 py-2 md:py-0 bg-white/90 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col md:flex-row items-center px-4 md:px-6 z-50 transition-all duration-300">
+        class="fixed bottom-0 left-0 w-full h-auto md:h-24 py-2 md:py-0 t-bg-panel/90 backdrop-blur-lg border-t t-border-main shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col md:flex-row items-center px-4 md:px-6 z-50 transition-all duration-300">
 
         <!-- Song Info -->
         <div class="w-full md:w-1/4 flex items-center gap-2 md:gap-4 mb-2 md:mb-0 pr-8 md:pr-0">
@@ -1766,7 +1775,7 @@
             <div class="overflow-hidden flex-1 flex flex-col justify-center">
                 <div class="flex items-center gap-2 min-w-0">
                     <div id="player-title"
-                        class="font-bold text-gray-800 truncate text-sm md:text-base dynamic-marquee min-w-0"
+                        class="font-bold t-text-main truncate text-sm md:text-base dynamic-marquee min-w-0"
                         data-text="暂无播放">暂无播放</div>
                     <div id="player-source" class="flex-shrink-0"></div>
                 </div>
@@ -1801,7 +1810,7 @@
 
             <!-- Progress Bar (Moved up for better mobile layout) -->
             <div
-                class="w-full flex items-center gap-2 md:gap-3 text-xs text-gray-400 font-mono mb-2 md:mb-0 relative py-1">
+                class="w-full flex items-center gap-2 md:gap-3 text-xs t-text-muted font-mono mb-2 md:mb-0 relative py-1">
                 <span id="time-current">00:00</span>
                 <div class="flex-1 h-8 flex items-center relative group">
                     <!-- Footer Info/Visualizer Canvas (Moved to match progress bar width) -->
@@ -1814,7 +1823,7 @@
                         id="progress-container" onclick="seek(event)">
                         <div id="progress-bar" class="bg-emerald-500 h-full rounded-full w-0 relative">
                             <div
-                                class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-gray-200 rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity">
+                                class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 t-bg-panel border t-border-main rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity">
                             </div>
                         </div>
                     </div>
@@ -1826,13 +1835,13 @@
                 <!-- Play Mode Button with Dropdown -->
                 <div class="relative group">
                     <button id="play-mode-btn" onclick="togglePlayModeMenu(event)"
-                        class="text-gray-400 hover:text-emerald-500 transition-colors p-2" title="播放模式">
+                        class="t-text-muted hover:text-emerald-500 transition-colors p-2" title="播放模式">
                         <i class="fas fa-redo"></i>
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="play-mode-menu"
-                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-white rounded-lg shadow-xl border border-gray-200 py-2 w-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div class="text-xs font-bold text-gray-400 px-3 py-1 uppercase tracking-wider">播放模式</div>
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 t-bg-panel rounded-lg shadow-xl border t-border-main py-2 w-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="text-xs font-bold t-text-muted px-3 py-1 uppercase tracking-wider">播放模式</div>
                         <button onclick="setPlayMode('list')"
                             class="play-mode-option w-full px-3 py-2 text-left hover:bg-emerald-50 flex items-center gap-2 text-sm transition-colors"
                             data-mode="list">
@@ -1860,28 +1869,28 @@
                     </div>
                 </div>
 
-                <button class="text-gray-600 hover:text-emerald-600 text-lg transition-colors p-2"
+                <button class="t-text-muted hover:text-emerald-600 text-lg transition-colors p-2"
                     onclick="playPrev()"><i class="fas fa-step-backward"></i></button>
                 <button id="btn-play"
                     class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-600 hover:scale-105 transition-all flex items-center justify-center"
                     onclick="togglePlay()">
                     <i class="fas fa-play ml-1 text-lg"></i>
                 </button>
-                <button class="text-gray-600 hover:text-emerald-600 text-lg transition-colors p-2"
+                <button class="t-text-muted hover:text-emerald-600 text-lg transition-colors p-2"
                     onclick="playNext()"><i class="fas fa-step-forward"></i></button>
 
                 <!-- Playback Rate Button -->
                 <div class="relative group">
                     <button id="playback-rate-btn" onclick="togglePlaybackRateMenu(event)"
-                        class="text-gray-400 hover:text-emerald-500 transition-colors p-2 text-[10px] md:text-sm font-black w-10 md:w-12"
+                        class="t-text-muted hover:text-emerald-500 transition-colors p-2 text-[10px] md:text-sm font-black w-10 md:w-12"
                         title="播放速度">
                         1.0x
                     </button>
                     <!-- Speed Menu -->
                     <div id="playback-rate-menu"
-                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-white rounded-lg shadow-xl border border-gray-200 py-2 w-20 md:w-24 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 t-bg-panel rounded-lg shadow-xl border t-border-main py-2 w-20 md:w-24 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                         <div
-                            class="text-[10px] font-bold text-gray-400 px-3 py-1 uppercase tracking-wider text-center border-b border-gray-50 mb-1">
+                            class="text-[10px] font-bold t-text-muted px-3 py-1 uppercase tracking-wider text-center border-b border-gray-50 mb-1">
                             倍速</div>
                         <button onclick="setPlaybackRate(0.5)"
                             class="playback-rate-option w-full px-3 py-1.5 text-center hover:bg-emerald-50 text-xs md:text-sm transition-colors"
@@ -1920,14 +1929,14 @@
                 class="text-gray-500 hover:text-emerald-600 text-sm font-bold border border-gray-300 rounded px-2 py-0.5"
                 onclick="toggleLyrics()">词</button>
             <div class="flex items-center gap-2 group">
-                <button onclick="toggleMute()" class="text-gray-400 hover:text-emerald-500 transition-colors">
+                <button onclick="toggleMute()" class="t-text-muted hover:text-emerald-500 transition-colors">
                     <i id="volume-icon" class="fas fa-volume-up w-4"></i>
                 </button>
                 <div class="w-20 bg-gray-200 rounded-full h-1.5 cursor-pointer relative" id="volume-container"
                     onclick="setVolume(event)">
                     <div id="volume-bar" class="bg-emerald-500 h-full rounded-full w-3/4 relative">
                         <div
-                            class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-gray-200 rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity">
+                            class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 t-bg-panel border t-border-main rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity">
                         </div>
                     </div>
                 </div>
@@ -1936,7 +1945,7 @@
 
         <!-- Collapse Panel Button -->
         <button id="btn-collapse-panel"
-            class="absolute right-2 md:right-6 top-2 md:top-1/2 md:-translate-y-1/2 text-gray-400 p-2 hover:text-gray-600 transition-all z-10"
+            class="absolute right-2 md:right-6 top-2 md:top-1/2 md:-translate-y-1/2 t-text-muted p-2 hover:t-text-muted transition-all z-10"
             onclick="togglePlayerPanel()">
             <i class="fas fa-chevron-down text-lg"></i>
         </button>
@@ -1944,14 +1953,14 @@
 
     <!-- Expand Panel Button (Hidden by default, shown when panel is collapsed) -->
     <button id="btn-expand-panel" onclick="togglePlayerPanel()"
-        class="fixed bottom-24 right-6 z-40 w-12 h-12 flex items-center justify-center bg-white/80 backdrop-blur-md rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-gray-500 hover:text-emerald-500 transform transition-all duration-300 translate-y-20 opacity-0 border border-white/50">
+        class="fixed bottom-24 right-6 z-40 w-12 h-12 flex items-center justify-center t-bg-panel/80 backdrop-blur-md rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-gray-500 hover:text-emerald-500 transform transition-all duration-300 translate-y-20 opacity-0 border border-white/50">
         <i class="fas fa-chevron-up text-lg"></i>
     </button>
 
     <!-- Sync Auth Modal -->
     <div id="sync-auth-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl w-96 p-6 relative">
-            <button onclick="closeSyncModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+        <div class="t-bg-panel rounded-lg shadow-xl w-96 p-6 relative">
+            <button onclick="closeSyncModal()" class="absolute top-2 right-2 t-text-muted hover:t-text-muted">
                 <i class="fas fa-times"></i>
             </button>
             <h3 class="text-lg font-bold mb-4 flex items-center">
@@ -1959,25 +1968,25 @@
             </h3>
 
             <div id="sync-mode-selection" class="hidden">
-                <p class="mb-4 text-sm text-gray-600">检测到远程数据与本地不一致，请选择同步方式：</p>
+                <p class="mb-4 text-sm t-text-muted">检测到远程数据与本地不一致，请选择同步方式：</p>
 
                 <div class="space-y-3">
-                    <div class="border p-3 rounded hover:bg-gray-50 cursor-pointer"
+                    <div class="border p-3 rounded hover:t-bg-main cursor-pointer"
                         onclick="selectSyncMode('merge_local_remote')">
                         <div class="font-bold text-sm">合并：本地 &rarr; 远程</div>
                         <div class="text-xs text-gray-500">将本地变更合并到远程 (保留两者)</div>
                     </div>
-                    <div class="border p-3 rounded hover:bg-gray-50 cursor-pointer"
+                    <div class="border p-3 rounded hover:t-bg-main cursor-pointer"
                         onclick="selectSyncMode('merge_remote_local')">
                         <div class="font-bold text-sm">合并：远程 &rarr; 本地</div>
                         <div class="text-xs text-gray-500">将远程变更合并到本地 (保留两者)</div>
                     </div>
-                    <div class="border p-3 rounded hover:bg-gray-50 cursor-pointer"
+                    <div class="border p-3 rounded hover:t-bg-main cursor-pointer"
                         onclick="selectSyncMode('overwrite_local_remote')">
                         <div class="font-bold text-sm">覆盖：本地 &rarr; 远程</div>
                         <div class="text-xs text-gray-500">用本地数据完全覆盖远程 (慎用)</div>
                     </div>
-                    <div class="border p-3 rounded hover:bg-gray-50 cursor-pointer"
+                    <div class="border p-3 rounded hover:t-bg-main cursor-pointer"
                         onclick="selectSyncMode('overwrite_remote_local')">
                         <div class="font-bold text-sm">覆盖：远程 &rarr; 本地</div>
                         <div class="text-xs text-gray-500">用远程数据完全覆盖本地 (推荐首次)</div>
@@ -1989,25 +1998,25 @@
                         <input type="checkbox" id="sync-full-overwrite" class="mr-1"> 完全覆盖 (清除其它)
                     </label>
                     <button onclick="cancelSyncMode()"
-                        class="px-3 py-1 text-sm text-gray-500 hover:text-gray-700">取消</button>
+                        class="px-3 py-1 text-sm text-gray-500 hover:t-text-main">取消</button>
                 </div>
             </div>
 
             <div id="sync-connect-form">
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">服务地址</label>
+                    <label class="block t-text-main text-sm font-bold mb-2">服务地址</label>
                     <input type="text" id="sync-url" placeholder="ws://your-server:9527"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="shadow appearance-none border rounded w-full py-2 px-3 t-text-main leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">连接码 (Connection Code)</label>
+                    <label class="block t-text-main text-sm font-bold mb-2">连接码 (Connection Code)</label>
                     <input type="password" id="sync-code" placeholder="输入连接码"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="shadow appearance-none border rounded w-full py-2 px-3 t-text-main leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 <div id="sync-status" class="mb-4 text-xs text-gray-500"></div>
                 <div class="flex justify-between">
                     <button onclick="closeSyncModal()"
-                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        class="bg-gray-300 hover:bg-gray-400 t-text-main font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         取消
                     </button>
                     <button onclick="handleRemoteConnect()"
@@ -2022,23 +2031,23 @@
     <!-- Custom Source Modal -->
     <div id="custom-source-modal"
         class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm transition-opacity duration-300">
-        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl transform transition-transform duration-300 scale-95 opacity-0"
+        <div class="t-bg-panel rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl transform transition-transform duration-300 scale-95 opacity-0"
             id="custom-source-modal-content">
             <!-- Header -->
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-2xl">
+            <div class="p-6 border-b t-border-main flex justify-between items-center t-bg-main rounded-t-2xl">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-800">自定义源管理</h3>
+                    <h3 class="text-xl font-bold t-text-main">自定义源管理</h3>
                     <div id="modal-source-scope-info" class="mt-1"></div>
                     <p class="text-sm text-gray-500 mt-1">管理和配置第三方音乐源脚本</p>
                 </div>
                 <button onclick="closeCustomSourceModal()"
-                    class="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-200 rounded-full">
+                    class="t-text-muted hover:t-text-muted transition-colors p-2 hover:bg-gray-200 rounded-full">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
 
             <!-- Toolbar -->
-            <div class="p-4 border-b border-gray-100 flex gap-3 bg-white">
+            <div class="p-4 border-b t-border-main flex gap-3 t-bg-panel">
                 <input type="file" id="script-file" accept=".js" class="hidden" onchange="handleFileUpload(this)">
                 <button onclick="document.getElementById('script-file').click()"
                     class="flex-1 flex items-center justify-center px-4 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-colors font-medium">
@@ -2051,7 +2060,7 @@
             </div>
 
             <!-- List -->
-            <div class="flex-1 overflow-y-auto p-4 bg-gray-50 custom-scrollbar" id="custom-sources-list">
+            <div class="flex-1 overflow-y-auto p-4 t-bg-main custom-scrollbar" id="custom-sources-list">
                 <!-- 列表将在此处渲染 -->
             </div>
         </div>
@@ -2060,23 +2069,23 @@
     <!-- Playlist Add Modal (添加到歌单) -->
     <div id="playlist-add-modal"
         class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center backdrop-blur-sm transition-opacity duration-300">
-        <div class="bg-white rounded-xl w-full max-w-2xl flex flex-col shadow-2xl transform transition-transform duration-300 scale-95 opacity-0 overflow-hidden"
+        <div class="t-bg-panel rounded-xl w-full max-w-2xl flex flex-col shadow-2xl transform transition-transform duration-300 scale-95 opacity-0 overflow-hidden"
             id="playlist-add-modal-content">
             <!-- Header -->
             <div class="p-4 border-b border-red-50 flex justify-between items-center bg-red-50/30">
                 <div class="flex-1 text-center">
-                    <h3 class="text-gray-700 font-medium">
+                    <h3 class="t-text-main font-medium">
                         添加 <span id="playlist-add-song-name" class="text-red-500 font-bold">Song Name</span> 到...
                     </h3>
                 </div>
                 <button onclick="closePlaylistAddModal()"
-                    class="absolute right-4 text-gray-400 hover:text-red-500 transition-colors">
+                    class="absolute right-4 t-text-muted hover:text-red-500 transition-colors">
                     <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
 
             <!-- Grid List -->
-            <div class="p-6 bg-white max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div class="p-6 t-bg-panel max-h-[60vh] overflow-y-auto custom-scrollbar">
                 <div id="playlist-add-list" class="grid grid-cols-3 gap-4">
                     <!-- Playlists will be injected here as buttons -->
                 </div>
@@ -2088,17 +2097,17 @@
     <!-- Sleep Timer Modal -->
     <div id="sleep-timer-modal"
         class="fixed inset-0 bg-black/40 z-[60] hidden items-center justify-center backdrop-blur-sm transition-opacity duration-300">
-        <div class="bg-white/90 backdrop-blur-xl rounded-3xl w-full max-w-sm flex flex-col shadow-2xl border border-white/20 transform transition-all duration-300 scale-95 opacity-0"
+        <div class="t-bg-panel/90 backdrop-blur-xl rounded-3xl w-full max-w-sm flex flex-col shadow-2xl border border-white/20 transform transition-all duration-300 scale-95 opacity-0"
             id="sleep-timer-modal-content">
             <div class="p-6">
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-black text-gray-800 flex items-center gap-2">
+                    <h3 class="text-xl font-black t-text-main flex items-center gap-2">
                         <i class="fas fa-moon text-emerald-500"></i>
                         睡眠定时
                     </h3>
                     <button onclick="closeSleepTimerModal()"
-                        class="text-gray-400 hover:text-gray-600 p-2 transition-colors">
+                        class="t-text-muted hover:t-text-muted p-2 transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -2111,7 +2120,7 @@
                         <div id="status-countdown" class="text-2xl font-black text-emerald-700 font-mono">30:00</div>
                     </div>
                     <button onclick="cancelSleepTimer()"
-                        class="px-4 py-2 bg-white text-red-500 text-xs font-bold rounded-xl shadow-sm hover:shadow-md transition-all">停止</button>
+                        class="px-4 py-2 t-bg-panel text-red-500 text-xs font-bold rounded-xl shadow-sm hover:shadow-md transition-all">停止</button>
                 </div>
 
                 <!-- Presets -->
@@ -2128,14 +2137,14 @@
                 <div id="custom-timer-input" class="hidden mb-6 animate-fade-in">
                     <div class="flex items-center gap-2">
                         <input type="number" id="custom-minutes" placeholder="分钟" min="1" max="1440"
-                            class="flex-1 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-bold text-sm">
+                            class="flex-1 px-4 py-3 t-bg-main border t-border-main rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-bold text-sm">
                         <button onclick="applyCustomTimer()"
                             class="px-5 py-3 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 text-sm hover:bg-emerald-600 transition-all">确定</button>
                     </div>
                 </div>
 
                 <!-- Footer Hint -->
-                <p class="text-[10px] text-gray-400 text-center leading-relaxed px-4">
+                <p class="text-[10px] t-text-muted text-center leading-relaxed px-4">
                     倒计时结束后将自动停止当前正在播放的音乐。<br>
                     祝您好梦 🌙
                 </p>
@@ -2152,29 +2161,29 @@
 
         <!-- 弹窗主体 -->
         <div id="lyric-card-modal-content"
-            class="relative w-full max-w-4xl h-[92vh] md:h-[88vh] bg-white/92 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500">
+            class="relative w-full max-w-4xl h-[92vh] md:h-[88vh] t-bg-panel/92 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500">
 
             <!-- Header -->
-            <div class="p-4 md:p-5 border-b border-gray-100 flex items-center justify-between flex-shrink-0 bg-white">
+            <div class="p-4 md:p-5 border-b t-border-main flex items-center justify-between flex-shrink-0 t-bg-panel">
                 <div class="flex items-center gap-3">
                     <i class="fas fa-image text-xl" style="color: var(--c-500)"></i>
                     <div>
-                        <h3 class="text-lg font-black text-gray-800">歌词卡片分享</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Lyric Card Share
+                        <h3 class="text-lg font-black t-text-main">歌词卡片分享</h3>
+                        <p class="text-[10px] t-text-muted font-bold uppercase tracking-wider mt-0.5">Lyric Card Share
                         </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- 刷新预览 -->
                     <button onclick="window.lyricCard && window.lyricCard.scheduleRender()"
-                        class="w-8 h-8 flex items-center justify-center text-gray-400 transition-colors rounded-xl"
+                        class="w-8 h-8 flex items-center justify-center t-text-muted transition-colors rounded-xl"
                         style="--hover-color: var(--c-500)"
                         onmouseenter="this.style.color=getComputedStyle(document.documentElement).getPropertyValue('--c-500')"
                         onmouseleave="this.style.color=''" title="刷新预览">
                         <i class="fas fa-sync-alt text-sm"></i>
                     </button>
                     <button onclick="window.lyricCard && window.lyricCard.close()"
-                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors rounded-xl hover:bg-red-50">
+                        class="w-8 h-8 flex items-center justify-center t-text-muted hover:text-red-500 transition-colors rounded-xl hover:bg-red-50">
                         <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
@@ -2185,7 +2194,7 @@
 
                 <!-- 左：预览区 -->
                 <div
-                    class="flex-1 md:flex-[3] flex flex-col items-center justify-center p-3 md:p-5 bg-gray-50/60 overflow-hidden relative min-h-[40vh] md:min-h-0">
+                    class="flex-1 md:flex-[3] flex flex-col items-center justify-center p-3 md:p-5 t-bg-main/60 overflow-hidden relative min-h-[40vh] md:min-h-0">
                     <div id="lyric-card-preview-wrapper"
                         class="relative overflow-hidden rounded-2xl shadow-2xl cursor-grab select-none"
                         style="max-width:100%; max-height:100%; display:flex; align-items:center; justify-content:center;">
@@ -2194,61 +2203,61 @@
                             alt="卡片预览" />
                     </div>
                     <!-- 操作提示 -->
-                    <p class="absolute bottom-2 text-[10px] text-gray-400 pointer-events-none">滚轮缩放 · 拖拽移动 · 双击重置</p>
+                    <p class="absolute bottom-2 text-[10px] t-text-muted pointer-events-none">滚轮缩放 · 拖拽移动 · 双击重置</p>
                     <!-- 加载中遮罩 -->
                     <div id="lyric-card-loading"
-                        class="absolute inset-0 flex items-center justify-center bg-gray-50/80 rounded-2xl hidden">
+                        class="absolute inset-0 flex items-center justify-center t-bg-main/80 rounded-2xl hidden">
                         <div class="flex flex-col items-center gap-3">
                             <div
                                 class="w-10 h-10 border-4 border-violet-100 border-t-violet-500 rounded-full animate-spin">
                             </div>
-                            <p class="text-xs text-gray-400 font-bold">渲染中...</p>
+                            <p class="text-xs t-text-muted font-bold">渲染中...</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 右：选项区 -->
                 <div
-                    class="flex-1 md:flex-none md:w-72 border-t md:border-t-0 md:border-l border-gray-100/60 overflow-y-auto custom-scrollbar p-4 space-y-5 bg-white min-h-0">
+                    class="flex-1 md:flex-none md:w-72 border-t md:border-t-0 md:border-l t-border-main/60 overflow-y-auto custom-scrollbar p-4 space-y-5 t-bg-panel min-h-0">
 
                     <!-- 内容选项 -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">显示内容</p>
+                        <p class="text-[10px] font-black t-text-muted uppercase tracking-widest mb-3">显示内容</p>
                         <div class="space-y-2">
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="lc-show-cover" checked
                                     class="w-4 h-4 rounded accent-violet-500 cursor-pointer"
                                     onchange="window.lyricCard && window.lyricCard.toggleOption('showCover')">
                                 <span
-                                    class="text-sm text-gray-700 group-hover:text-violet-600 transition-colors">显示封面</span>
+                                    class="text-sm t-text-main group-hover:text-violet-600 transition-colors">显示封面</span>
                             </label>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="lc-show-title" checked
                                     class="w-4 h-4 rounded accent-violet-500 cursor-pointer"
                                     onchange="window.lyricCard && window.lyricCard.toggleOption('showTitle')">
                                 <span
-                                    class="text-sm text-gray-700 group-hover:text-violet-600 transition-colors">显示标题</span>
+                                    class="text-sm t-text-main group-hover:text-violet-600 transition-colors">显示标题</span>
                             </label>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="lc-show-artist" checked
                                     class="w-4 h-4 rounded accent-violet-500 cursor-pointer"
                                     onchange="window.lyricCard && window.lyricCard.toggleOption('showArtist')">
                                 <span
-                                    class="text-sm text-gray-700 group-hover:text-violet-600 transition-colors">显示歌手</span>
+                                    class="text-sm t-text-main group-hover:text-violet-600 transition-colors">显示歌手</span>
                             </label>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="lc-show-lyric" checked
                                     class="w-4 h-4 rounded accent-violet-500 cursor-pointer"
                                     onchange="window.lyricCard && window.lyricCard.toggleOption('showLyric')">
                                 <span
-                                    class="text-sm text-gray-700 group-hover:text-violet-600 transition-colors">显示歌词</span>
+                                    class="text-sm t-text-main group-hover:text-violet-600 transition-colors">显示歌词</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- 布局选项 -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">卡片比例</p>
+                        <p class="text-[10px] font-black t-text-muted uppercase tracking-widest mb-3">卡片比例</p>
                         <div class="grid grid-cols-3 gap-2">
                             <button
                                 class="lc-layout-btn lc-btn-active py-2 px-1 rounded-xl text-xs font-bold transition-all border-2"
@@ -2270,7 +2279,7 @@
 
                     <!-- 色彩主题 -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">色彩风格</p>
+                        <p class="text-[10px] font-black t-text-muted uppercase tracking-widest mb-3">色彩风格</p>
                         <div class="grid grid-cols-3 gap-2">
                             <button
                                 class="lc-color-btn lc-btn-active py-2 px-1 rounded-xl text-xs font-bold transition-all border-2 flex flex-col items-center gap-1"
@@ -2284,7 +2293,7 @@
                                 data-color="light"
                                 onclick="window.lyricCard && window.lyricCard.setColorTheme('light')">
                                 <span
-                                    class="w-5 h-5 rounded-full bg-gradient-to-br from-gray-100 to-gray-300 block border border-gray-200"></span>
+                                    class="w-5 h-5 rounded-full bg-gradient-to-br from-gray-100 to-gray-300 block border t-border-main"></span>
                                 浅色
                             </button>
                             <button
@@ -2300,7 +2309,7 @@
 
                     <!-- 歌词行数 -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">歌词行数</p>
+                        <p class="text-[10px] font-black t-text-muted uppercase tracking-widest mb-3">歌词行数</p>
                         <div class="grid grid-cols-3 gap-2">
                             <button class="lc-lines-btn py-2 rounded-xl text-xs font-bold transition-all border-2"
                                 data-lines="1"
@@ -2321,7 +2330,7 @@
                     <!-- 字体大小 -->
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">字体大小</p>
+                            <p class="text-[10px] font-black t-text-muted uppercase tracking-widest">字体大小</p>
                             <span id="lc-font-size-label" class="text-[10px] font-bold"
                                 style="color: var(--c-500)">100%</span>
                         </div>
@@ -2333,7 +2342,7 @@
                     <!-- 行间距 -->
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">行间距</p>
+                            <p class="text-[10px] font-black t-text-muted uppercase tracking-widest">行间距</p>
                             <span id="lc-line-spacing-label" class="text-[10px] font-bold"
                                 style="color: var(--c-500)">1.0x</span>
                         </div>
@@ -2344,10 +2353,10 @@
 
                     <!-- 字体选择 -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">卡片字体</p>
+                        <p class="text-[10px] font-black t-text-muted uppercase tracking-widest mb-2">卡片字体</p>
                         <div class="flex gap-2">
                             <select id="lc-font-select"
-                                class="flex-1 min-w-0 text-xs border border-gray-200 rounded-xl px-2 py-1.5 bg-white text-gray-700 focus:outline-none"
+                                class="flex-1 min-w-0 text-xs border t-border-main rounded-xl px-2 py-1.5 t-bg-panel t-text-main focus:outline-none"
                                 style="--focus-border: var(--c-400)"
                                 onchange="window.lyricCard && window.lyricCard.setFontFamily(this.value)">
                                 <option value="">跟随设置</option>
@@ -2359,7 +2368,7 @@
                                 <option value='"KaiTi", serif'>楷体</option>
                             </select>
                             <button onclick="loadLocalFonts('lc-font-select', this)"
-                                class="flex-shrink-0 text-xs px-2 py-1.5 border border-gray-200 rounded-xl text-gray-500 transition-colors whitespace-nowrap"
+                                class="flex-shrink-0 text-xs px-2 py-1.5 border t-border-main rounded-xl text-gray-500 transition-colors whitespace-nowrap"
                                 onmouseenter="this.style.color=getComputedStyle(document.documentElement).getPropertyValue('--c-500');this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c-300')"
                                 onmouseleave="this.style.color='';this.style.borderColor=''">
                                 <i class="fas fa-sync-alt mr-1"></i>读取
@@ -2376,7 +2385,7 @@
                             下载图片
                         </button>
                         <button onclick="window.lyricCard && window.lyricCard.copyToClipboard()"
-                            class="w-full py-3 bg-white text-gray-700 font-bold rounded-2xl border-2 border-gray-100 transition-all flex items-center justify-center gap-2"
+                            class="w-full py-3 t-bg-panel t-text-main font-bold rounded-2xl border-2 t-border-main transition-all flex items-center justify-center gap-2"
                             onmouseenter="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c-200');this.style.color=getComputedStyle(document.documentElement).getPropertyValue('--c-600')"
                             onmouseleave="this.style.borderColor='';this.style.color=''">
                             <i class="fas fa-copy"></i>
@@ -2385,7 +2394,7 @@
                     </div>
 
                     <!-- 提示 -->
-                    <p class="text-[10px] text-gray-400 text-center leading-relaxed pb-2">
+                    <p class="text-[10px] t-text-muted text-center leading-relaxed pb-2">
                         图片将包含当前播放歌曲信息<br>点击刷新按钮可更新歌词内容
                     </p>
                 </div>
@@ -2398,41 +2407,41 @@
         class="fixed inset-0 z-[70] hidden items-center justify-center p-4 md:p-6 transition-all duration-300">
         <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" onclick="toggleCommentModal()"></div>
         <div id="comment-modal-content"
-            class="relative w-full max-w-2xl h-[85vh] md:h-[80vh] bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500">
+            class="relative w-full max-w-2xl h-[85vh] md:h-[80vh] t-bg-panel/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 flex flex-col overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500">
             <!-- Header -->
-            <div class="p-4 md:p-6 border-b border-gray-100/50 flex items-center justify-between">
+            <div class="p-4 md:p-6 border-b t-border-main/50 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div
                         class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-100">
                         <i class="fas fa-comments text-white text-lg md:text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg md:text-xl font-black text-gray-800" id="comment-title">歌曲评论</h3>
-                        <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">
+                        <h3 class="text-lg md:text-xl font-black t-text-main" id="comment-title">歌曲评论</h3>
+                        <p class="text-[10px] md:text-xs t-text-muted font-bold uppercase tracking-wider mt-0.5">
                             Comments Flow</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="refreshComments()"
-                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 hover:text-emerald-500 transition-colors rounded-xl hover:bg-emerald-50">
+                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center t-text-muted hover:text-emerald-500 transition-colors rounded-xl hover:bg-emerald-50">
                         <i class="fas fa-sync-alt"></i>
                     </button>
                     <button onclick="toggleCommentModal()"
-                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors rounded-xl hover:bg-red-50">
+                        class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center t-text-muted hover:text-red-500 transition-colors rounded-xl hover:bg-red-50">
                         <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Tabs -->
-            <div class="px-4 md:px-6 py-2 md:py-3 border-b border-gray-100/30 flex items-center gap-4 md:gap-6">
+            <div class="px-4 md:px-6 py-2 md:py-3 border-b t-border-main/30 flex items-center gap-4 md:gap-6">
                 <button id="tab-hot-comments" onclick="switchCommentType('hot')"
                     class="relative py-2 text-sm font-black transition-colors text-emerald-600">
                     最热评论 <span id="hot-comment-count" class="text-[10px] opacity-60 ml-0.5"></span>
                     <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500 rounded-full"></div>
                 </button>
                 <button id="tab-new-comments" onclick="switchCommentType('new')"
-                    class="relative py-2 text-sm font-black transition-colors text-gray-400 hover:text-gray-600">
+                    class="relative py-2 text-sm font-black transition-colors t-text-muted hover:t-text-muted">
                     最新评论 <span id="new-comment-count" class="text-[10px] opacity-60 ml-0.5"></span>
                     <div
                         class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500 rounded-full scale-x-0 transition-transform">
@@ -2447,17 +2456,17 @@
                 <div id="comment-loader" class="flex flex-col items-center justify-center py-20 space-y-4">
                     <div class="w-12 h-12 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin">
                     </div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">正在加载评论...</p>
+                    <p class="text-xs font-bold t-text-muted uppercase tracking-widest">正在加载评论...</p>
                 </div>
                 <!-- List Container -->
                 <div id="comment-list" class="space-y-6 md:space-y-8"></div>
             </div>
 
             <!-- Modal Footer -->
-            <div class="px-6 py-3 bg-gray-50/50 border-t border-gray-100/30 flex items-center justify-between">
+            <div class="px-6 py-3 t-bg-main/50 border-t t-border-main/30 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <button onclick="changeCommentPage(-1)"
-                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
+                        class="w-8 h-8 flex items-center justify-center t-text-muted hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
                         id="btn-comment-prev">
                         <i class="fas fa-chevron-left text-xs"></i>
                     </button>
@@ -2466,12 +2475,12 @@
                         PAGE 1 / 1
                     </span>
                     <button onclick="changeCommentPage(1)"
-                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
+                        class="w-8 h-8 flex items-center justify-center t-text-muted hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all disabled:opacity-20 disabled:pointer-events-none"
                         id="btn-comment-next">
                         <i class="fas fa-chevron-right text-xs"></i>
                     </button>
                 </div>
-                <div class="flex items-center gap-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                <div class="flex items-center gap-4 text-[10px] t-text-muted font-bold uppercase tracking-widest">
                     <span id="comment-source-info">Source: --</span>
                 </div>
             </div>

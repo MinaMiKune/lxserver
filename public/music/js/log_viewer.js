@@ -7,7 +7,7 @@
     const originalLog = console.log;
     const originalWarn = console.warn;
     const originalError = console.error;
-    
+
     // Store logs in memory
     window.systemLogs = [];
     const MAX_LOGS = 1000;
@@ -15,7 +15,7 @@
     function captureLog(type, args) {
         const now = new Date();
         const timeStr = now.toLocaleTimeString() + '.' + String(now.getMilliseconds()).padStart(3, '0');
-        
+
         let message = '';
         try {
             message = args.map(arg => {
@@ -87,17 +87,16 @@
     // Helper: Append single log
     function appendLogToView(container, log) {
         const div = document.createElement('div');
-        div.className = `font-mono text-xs py-1 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors ${
-            log.type === 'error' ? 'text-red-600 bg-red-50/50' : 
-            log.type === 'warn' ? 'text-amber-600 bg-amber-50/50' : 
-            'text-gray-600'
-        }`;
-        
+        div.className = `font-mono text-xs py-1 border-b t-border-main last:border-0 hover:t-bg-main transition-colors ${log.type === 'error' ? 'text-red-600 bg-red-50/50' :
+            log.type === 'warn' ? 'text-amber-600 bg-amber-50/50' :
+                't-text-muted'
+            }`;
+
         // Colorize time
-        const timeHtml = `<span class="text-gray-400 select-none mr-2">[${log.time}]</span>`;
+        const timeHtml = `<span class="t-text-muted select-none mr-2">[${log.time}]</span>`;
         // Message with preserved whitespace
         const msgHtml = `<span class="whitespace-pre-wrap break-words">${escapeHtml(log.message)}</span>`;
-        
+
         div.innerHTML = timeHtml + msgHtml;
         container.appendChild(div);
     }
@@ -109,7 +108,7 @@
 
         container.innerHTML = '';
         window.systemLogs.forEach(log => appendLogToView(container, log));
-        
+
         // Scroll to bottom initially
         setTimeout(() => {
             container.scrollTop = container.scrollHeight;
@@ -118,7 +117,7 @@
     };
 
     // Global function to clear logs
-    window.clearSystemLogs = function() {
+    window.clearSystemLogs = function () {
         window.systemLogs = [];
         const container = document.getElementById('system-log-container');
         if (container) container.innerHTML = '';

@@ -81,8 +81,8 @@ const loadedApis = new Map<string, any>()
 // API 初始化状态追踪 map<id, status>
 const apiStatus = new Map<string, { status: 'success' | 'failed', error?: string }>()
 
-export function getApiStatus(id: string) {
-    return apiStatus.get(id)
+export function getApiStatus(owner: string, id: string) {
+    return apiStatus.get(`${owner}_${id}`)
 }
 
 
@@ -374,7 +374,7 @@ export async function loadUserApi(apiInfo: UserApiInfo): Promise<any> {
             }
         }
 
-        loadedApis.set(apiInfo.id, apiInstance)
+        loadedApis.set(`${fullApiInfo.owner}_${apiInfo.id}`, apiInstance)
         console.log(`[UserApi] ✓ 成功加载: ${fullApiInfo.name} v${fullApiInfo.version} (Owner: ${fullApiInfo.owner})`)
         console.log(`[UserApi]   支持源: ${Object.keys(registeredSources).join(', ')}`)
         return { success: true, apiInstance, error: null }
@@ -487,13 +487,59 @@ export async function callUserApiGetMusicUrl(
     // 查找支持该 source 的 API
     // 收集所有支持该 source 的 API，并根据权限过滤
     const candidates: any[] = []
+    const userApiIds = new Set<string>()
+
+    // 读取当前用户的自定公开源状态（启用/禁用覆盖）以及个人拥有记录
+    let userStates: Record<string, any> = {}
+    if (clientUsername && clientUsername !== 'default') {
+        const dataPath = process.env.DATA_PATH || path.join(process.cwd(), 'data')
+        const userPath = path.join(dataPath, 'users', 'source', clientUsername)
+        const statesPath = path.join(userPath, 'states.json')
+        const metaPath = path.join(userPath, 'sources.json')
+
+        if (fs.existsSync(statesPath)) {
+            try { userStates = JSON.parse(fs.readFileSync(statesPath, 'utf-8')) } catch (e) { }
+        }
+
+        // 把用户个人的所有源 (包含已禁用的) ID 收集起来，为了彻底屏蔽同名公开源
+        if (fs.existsSync(metaPath)) {
+            try {
+                const userSources = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+                for (const s of userSources) {
+                    userApiIds.add(s.id)
+                }
+            } catch (e) { }
+        }
+    }
+
+    // 第一遍：收集当前用户启用的源
     for (const [apiId, api] of loadedApis) {
         if (!api.info.enabled) continue
         if (!api.info.sources || !api.info.sources[source]) continue
 
-        // 权限校验：只允许 open 源 或 当前用户及其拥有的源
-        if (api.info.owner === 'open' || (clientUsername && api.info.owner === clientUsername)) {
+        if (clientUsername && api.info.owner === clientUsername) {
             candidates.push(api)
+            userApiIds.add(api.info.id) // 兜底补录
+        }
+    }
+
+    // 第二遍：收集公开源，但排除用户自己已有的同名源
+    for (const [apiId, api] of loadedApis) {
+        if (!api.info.sources || !api.info.sources[source]) continue
+
+        if (api.info.owner === 'open') {
+            // 获取最终有效的启用状态
+            let isEnabled = api.info.enabled
+            if (clientUsername && clientUsername !== 'default' && userStates[api.info.id]) {
+                if (typeof userStates[api.info.id].enabled === 'boolean') {
+                    isEnabled = userStates[api.info.id].enabled
+                }
+            }
+            if (!isEnabled) continue
+
+            if (!userApiIds.has(api.info.id)) {
+                candidates.push(api)
+            }
         }
     }
 
@@ -581,9 +627,9 @@ async function loadSourcesFromDir(dirPath: string, owner: string, stats: { loade
         let needsSave = false
 
         for (const source of sources) {
-            if (!source.enabled) {
+            if (!source.enabled && owner !== 'open') {
                 console.log(`[UserApi] [${owner}] 跳过已禁用: ${source.name}`)
-                apiStatus.delete(source.id)
+                apiStatus.delete(`${owner}_${source.id}`)
                 continue
             }
 
@@ -606,14 +652,14 @@ async function loadSourcesFromDir(dirPath: string, owner: string, stats: { loade
                     homepage: metadata.homepage || '',
                     script,
                     sources: {},
-                    enabled: true,
+                    enabled: source.enabled, // 传递原本的开关状态
                     allowUnsafeVM: source.allowUnsafeVM, // 传递不安全模式标志
                     owner: owner // 设置 owner
                 })
 
                 if (result.success) {
                     stats.loadedCount++
-                    apiStatus.set(source.id, { status: 'success' })
+                    apiStatus.set(`${owner}_${source.id}`, { status: 'success' })
 
                     // [Self-Healing] 检查并修复 supportedSources
                     const runtimeSources = Object.keys(result.apiInstance.info.sources).sort();
@@ -630,11 +676,11 @@ async function loadSourcesFromDir(dirPath: string, owner: string, stats: { loade
                     }
                 } else {
                     console.error(`[UserApi] [${owner}] 加载 ${metadata.name || source.name} 失败: ${result.error}`)
-                    apiStatus.set(source.id, { status: 'failed', error: result.error })
+                    apiStatus.set(`${owner}_${source.id}`, { status: 'failed', error: result.error })
                 }
             } catch (error: any) {
                 console.error(`[UserApi] [${owner}] 加载 ${source.name} 失败:`, error.message)
-                apiStatus.set(source.id, { status: 'failed', error: error.message })
+                apiStatus.set(`${owner}_${source.id}`, { status: 'failed', error: error.message })
             }
         }
 
@@ -740,10 +786,14 @@ export async function initUserApis(targetUser?: string) {
     if (targetUser) {
         console.log(`[UserApi] 重新加载用户源: ${targetUser}`)
         // 清理该用户的旧源和状态
-        for (const [id, api] of loadedApis.entries()) {
+        for (const [key, api] of loadedApis.entries()) {
             if (api.info.owner === targetUser) {
-                loadedApis.delete(id)
-                apiStatus.delete(id)
+                loadedApis.delete(key)
+            }
+        }
+        for (const key of apiStatus.keys()) {
+            if (key.startsWith(`${targetUser}_`)) {
+                apiStatus.delete(key)
             }
         }
 

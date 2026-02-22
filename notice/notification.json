@@ -18,25 +18,25 @@
         }
     },
     {
-        "comment": "=== 版本更新 v1.5.3 ===",
-        "id": "update_v1_5_3",
+        "comment": "=== 版本更新 v1.5.4 ===",
+        "id": "update_v1_5_4",
         "status": "active",
         "type": "version",
         "logic": {
-            "target_version": "v1.5.3",
+            "target_version": "v1.5.4",
             "operator": "<",
             "interval_hours": 24
         },
         "ui": {
-            "title": "发现新版本 v1.5.3",
-            "date": "2026-02-21",
-            "message": "本次更新带来了以下变动：\n1. ⬆️ 自定义源排序：新增自定义源列表拖拽排序功能，解析将优先根据排序队列执行。\n2. 📄 解析详情提示：提供更详尽的解析失败 Toast 提示，方便排查音源错误。\n3. 🔧 VM加载修复：进一步修复与强化了原生 VM 模式下对复杂 JS 音源脚本的加载与隔离兼容性。",
+            "title": "发现新版本 v1.5.4",
+            "date": "2026-02-22",
+            "message": "本次更新带来了以下变动：\n1. 🌙 暗夜模式：新增加暗夜模式。\n2. 🛡️ 自动代理：增加了针对 HTTPS 下 HTTP 资源的自动代理机制。\n3. 🔧 界面优化：修复了部分 UI 并去除了收藏列表的专辑显示。",
             "confirm_text": "去查看",
             "cancel_text": "稍后提醒"
         },
         "action": {
             "type": "link",
-            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.5.3"
+            "url": "https://github.com/XCQ0607/lxserver/releases/tag/v1.5.4"
         }
     }
 ]

@@ -469,12 +469,29 @@ function switchTab(tabId) {
     }, 10);
 
     // Reset Sidebar Highlight
-    document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.remove('active-tab', 'text-emerald-600'));
+    document.querySelectorAll('[id^="tab-"]').forEach(el => {
+        el.classList.remove('active-tab', 'text-emerald-600');
+        el.classList.add('t-text-muted');
+    });
     const activeTab = document.getElementById(`tab-${tabId}`);
-    if (activeTab) { // might be Favorites div
+    if (activeTab) {
         activeTab.classList.add('active-tab');
-        activeTab.classList.remove('text-gray-600');
+        activeTab.classList.remove('t-text-muted');
     }
+
+    // Mobile: Close sidebar when switching tabs except for favorites (which should show sub-lists)
+    if (window.innerWidth < 768 && tabId !== 'favorites') {
+        const sidebar = document.getElementById('main-sidebar');
+        if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+            toggleSidebar();
+        }
+    }
+
+    // Always clear sub-item highlight when switching top-level tabs
+    document.querySelectorAll('[data-sidebar-list-id]').forEach(el => {
+        el.classList.remove('active-sub-item');
+        el.classList.add('t-text-muted');
+    });
 
     // Reset Search Scope if switching to search/settings explicitly
     if (tabId === 'search') {
@@ -750,7 +767,7 @@ function renderHotSearch(data) {
     if (!container || !data || !data.list || data.list.length === 0 || settings.hotSearchLimit === 0) {
         // 显示默认空白状态
         container.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+            <div class="flex flex-col items-center justify-center h-full t-text-muted space-y-4">
                 <i class="fas fa-music text-6xl opacity-20"></i>
                 <p>输入关键词开始搜索音乐</p>
             </div>
@@ -767,18 +784,18 @@ function renderHotSearch(data) {
         <div class="hot-search-container p-8">
             <div class="flex items-center mb-6">
                 <i class="fas fa-fire text-orange-500 text-2xl mr-3"></i>
-                <h3 class="text-xl font-bold text-gray-700">热门搜索</h3>
+                <h3 class="text-xl font-bold t-text-main">热门搜索</h3>
                 <span class="ml-3">${sourceTag}</span>
             </div>
             <div class="hot-search-list grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 ${keywords.map((keyword, index) => `
                     <button onclick="handleHotSearchClick('${keyword.replace(/'/g, "\\'")}')" 
-                            class="hot-search-item group flex items-center p-3 bg-white hover:bg-emerald-50 border border-gray-200 hover:border-emerald-400 rounded-lg transition-all shadow-sm hover:shadow-md overflow-hidden h-14">
+                            class="hot-search-item group flex items-center p-3 t-bg-panel hover:bg-emerald-50 border t-border-main hover:border-emerald-400 rounded-lg transition-all shadow-sm hover:shadow-md overflow-hidden h-14">
                         <span class="rank flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold mr-3 ${index < 3 ? 'bg-gradient-to-r from-orange-400 to-red-500 text-white' : 'bg-gray-100 text-gray-500'
         }">
                             ${index + 1}
                         </span>
-                        <span class="keyword flex-1 text-left text-sm font-medium text-gray-700 group-hover:text-emerald-600 truncate">
+                        <span class="keyword flex-1 text-left text-sm font-medium t-text-main group-hover:text-emerald-600 truncate">
                             ${keyword}
                         </span>
                         <i class="fas fa-search text-xs text-gray-300 group-hover:text-emerald-500 transition-colors ml-2"></i>
@@ -787,7 +804,7 @@ function renderHotSearch(data) {
             </div>
             <div class="mt-6 text-center">
                 <button onclick="showInitialSearchState()" 
-                        class="text-sm text-gray-400 hover:text-emerald-500 transition-colors">
+                        class="text-sm t-text-muted hover:text-emerald-500 transition-colors">
                     <i class="fas fa-sync-alt mr-1"></i>
                     刷新热搜
                 </button>
@@ -837,7 +854,7 @@ function showInitialSearchState() {
 
     // 显示加载状态
     container.innerHTML = `
-        <div class="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+        <div class="flex flex-col items-center justify-center h-full t-text-muted space-y-4">
             <i class="fas fa-spinner fa-spin text-4xl text-emerald-500"></i>
             <p>正在加载热门搜索...</p>
         </div>
@@ -853,7 +870,7 @@ function showInitialSearchState() {
         console.error('[HotSearch] 显示热搜失败:', err);
         // 失败时显示默认状态
         container.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+            <div class="flex flex-col items-center justify-center h-full t-text-muted space-y-4">
                 <i class="fas fa-music text-6xl opacity-20"></i>
                 <p>输入关键词开始搜索音乐</p>
             </div>
@@ -890,23 +907,23 @@ function getQualityTags(item) {
         hasHiRes = !!rawTypes['flac24bit'];
     }
 
-    if (hasHiRes) tags.push('<span class="px-1 py-0.5 rounded text-[10px] bg-yellow-100 text-yellow-700 border border-yellow-200 ml-1">HR</span>');
-    else if (hasFlac) tags.push('<span class="px-1 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-700 border border-emerald-200 ml-1">SQ</span>');
-    else if (has320) tags.push('<span class="px-1 py-0.5 rounded text-[10px] bg-blue-100 text-blue-700 border border-blue-200 ml-1">HQ</span>');
+    if (hasHiRes) tags.push('<span class="px-1 py-0.5 rounded text-[10px] t-badge-yellow border border-yellow-200 dark:border-yellow-500/30 ml-1 transition-colors">HR</span>');
+    else if (hasFlac) tags.push('<span class="px-1 py-0.5 rounded text-[10px] t-badge-green border border-emerald-200 dark:border-emerald-500/30 ml-1 transition-colors">SQ</span>');
+    else if (has320) tags.push('<span class="px-1 py-0.5 rounded text-[10px] t-badge-blue border border-blue-200 dark:border-blue-500/30 ml-1 transition-colors">HQ</span>');
 
     return tags.join('');
 }
 
 function getSourceTag(source) {
     const colors = {
-        kw: 'bg-yellow-50 text-yellow-600 border-yellow-200',
-        kg: 'bg-blue-50 text-blue-600 border-blue-200',
-        tx: 'bg-green-50 text-green-600 border-green-200',
-        wy: 'bg-red-50 text-red-600 border-red-200',
-        mg: 'bg-pink-50 text-pink-600 border-pink-200'
+        kw: 't-badge-yellow border-yellow-200 dark:border-yellow-500/30',
+        kg: 't-badge-blue border-blue-200 dark:border-blue-500/30',
+        tx: 't-badge-green border-green-200 dark:border-emerald-500/30',
+        wy: 't-badge-red border-red-200 dark:border-red-500/30',
+        mg: 't-badge-pink border-pink-200 dark:border-pink-500/30'
     };
     const names = { kw: '酷我', kg: '酷狗', tx: 'QQ', wy: '网易', mg: '咪咕' };
-    const color = colors[source] || 'bg-gray-50 text-gray-600 border-gray-200';
+    const color = colors[source] || 't-bg-main t-text-muted t-border-main';
     const name = names[source] || source.toUpperCase();
     return `<span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold border ${color} mr-2">${name}</span>`;
 }
@@ -921,10 +938,34 @@ function getImgUrl(item) {
 function renderResults(list) {
     const container = document.getElementById('search-results');
     const header = document.getElementById('search-results-header');
+    const headerTitle = document.getElementById('header-title');
+    const headerAlbum = document.getElementById('header-album');
 
-    // 显示表头
+    // Determine if we should show the album column
+    // Search results (network) show album, collections (local) do not
+    const showAlbum = currentSearchScope === 'network';
+
+    // Update Header
     if (header) {
         header.classList.remove('hidden');
+    }
+    if (headerTitle) {
+        if (showAlbum) {
+            headerTitle.classList.remove('lg:col-span-6');
+            headerTitle.classList.add('lg:col-span-4');
+        } else {
+            headerTitle.classList.remove('lg:col-span-4');
+            headerTitle.classList.add('lg:col-span-6');
+        }
+    }
+    if (headerAlbum) {
+        if (showAlbum) {
+            headerAlbum.classList.add('hidden');
+            headerAlbum.classList.add('lg:block');
+        } else {
+            headerAlbum.classList.add('hidden');
+            headerAlbum.classList.remove('lg:block');
+        }
     }
 
     container.innerHTML = '';
@@ -942,7 +983,7 @@ function renderResults(list) {
     currentPlaylist = list;
 
     if (!list || list.length === 0) {
-        container.innerHTML = '<div class="text-center text-gray-400 p-8">未找到相关结果</div>';
+        container.innerHTML = '<div class="text-center t-text-muted p-8">未找到相关结果</div>';
         updatePaginationInfo(0, 0, 0);
         return;
     }
@@ -963,22 +1004,19 @@ function renderResults(list) {
     pageList.forEach((item, pageIndex) => {
         const actualIndex = startIndex + pageIndex; // Index in full list
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 gap-4 p-3 hover:bg-gray-50 border-b border-gray-50 items-center text-sm group transition-colors';
+        row.className = 'grid grid-cols-12 gap-4 p-3 hover:t-bg-main border-b border-gray-50 items-center text-sm group transition-colors';
 
         // Image
         const imgUrl = getImgUrl(item);
 
         const isSelected = selectedItems.has(String(item.id));
 
-        // Grid Layout:
-        // Mobile (<640px): Index(2) + Title(8) + Actions(2) = 12 (Artist/Album/Time Hidden)
-        // SM (640-768px): Index(1) + Title(7) + Artist(3) + Actions(1) = 12 (Album/Time Hidden)
-        // MD (768-1024px): Index(1) + Title(6) + Artist(3) + Time(1) + Actions(1) = 12 (Album Hidden)
-        // LG (>1024px): Index(1) + Title(4) + Artist(3) + Album(2) + Time(1) + Actions(1) = 12
+        // Grid Layout Adjustment
+        const titleLgSpan = showAlbum ? 'lg:col-span-4' : 'lg:col-span-6';
 
         row.innerHTML = `
             <!-- Index -->
-            <div class="col-span-2 sm:col-span-1 text-center font-mono text-gray-400 text-xs md:text-sm flex items-center justify-center">
+            <div class="col-span-2 sm:col-span-1 text-center font-mono t-text-muted text-xs md:text-sm flex items-center justify-center">
                 ${batchMode ? `
                     <input type="checkbox" 
                            class="batch-checkbox w-4 h-4 text-emerald-600 rounded" 
@@ -989,7 +1027,7 @@ function renderResults(list) {
             </div>
 
             <!-- Title (Image + Text) -->
-            <div class="col-span-8 sm:col-span-7 md:col-span-6 lg:col-span-4 flex items-center overflow-hidden pr-2">
+            <div class="col-span-8 sm:col-span-7 md:col-span-6 ${titleLgSpan} flex items-center overflow-hidden pr-2">
                 <div class="relative w-10 h-10 md:w-12 md:h-12 mr-3 md:mr-4 flex-shrink-0 group cursor-pointer">
                      <img data-src="${imgUrl}" src="/music/assets/logo.svg" 
                           class="lazy-image w-full h-full rounded-lg object-cover shadow-sm group-hover:shadow-md transition-all group-hover:scale-105 duration-300 dynamic-logo" 
@@ -1002,7 +1040,7 @@ function renderResults(list) {
                      </div>
                 </div>
                 <div class="min-w-0 flex-1 flex flex-col justify-center overflow-hidden">
-                    <div class="font-bold text-gray-800 text-sm md:text-base leading-tight hover:text-emerald-600 cursor-pointer transition-colors" 
+                    <div class="font-bold t-text-main text-sm md:text-base leading-tight hover:text-emerald-600 cursor-pointer transition-colors" 
                          onclick="playSong(${JSON.stringify(item).replace(/"/g, '&quot;')}, ${actualIndex})">
                          ${createMarqueeHtml(item.name)}
                     </div>
@@ -1014,19 +1052,21 @@ function renderResults(list) {
             </div>
 
             <!-- Artist (Hidden on Mobile) -->
-            <div class="hidden sm:block sm:col-span-3 md:col-span-3 lg:col-span-3 text-gray-600 text-sm md:text-base truncate flex items-center hover:text-emerald-600 transition-colors cursor-pointer"
+            <div class="hidden sm:block sm:col-span-3 md:col-span-3 lg:col-span-3 t-text-muted text-sm md:text-base truncate flex items-center hover:text-emerald-600 transition-colors cursor-pointer"
                  title="${item.singer}"
                  onclick="event.stopPropagation(); document.getElementById('search-input').value = '${item.singer.replace(/'/g, "\\'")}'; doSearch();">
                 ${item.singer}
             </div>
 
             <!-- Album (Hidden until LG) -->
+            ${showAlbum ? `
             <div class="hidden lg:block lg:col-span-2 text-gray-500 text-sm truncate flex items-center" title="${item.albumName || ''}">
                 ${item.albumName || '-'}
             </div>
+            ` : ''}
 
             <!-- Duration (Hidden until MD) -->
-            <div class="hidden md:block md:col-span-1 text-gray-400 text-sm font-mono text-center flex items-center justify-center">
+            <div class="hidden md:block md:col-span-1 t-text-muted text-sm font-mono text-center flex items-center justify-center">
                 ${item.interval || '--:--'}
             </div>
 
@@ -2989,7 +3029,7 @@ async function updateServerCacheSize() {
 
     try {
         infoEl.textContent = '计算中...';
-        infoEl.className = 'text-sm font-bold text-gray-500 bg-gray-50 px-2 py-1 rounded';
+        infoEl.className = 'text-sm font-bold text-gray-500 t-bg-main px-2 py-1 rounded';
 
         const username = currentListData?.username || '';
         const headers = {};
@@ -3170,7 +3210,7 @@ async function fetchLyric(song) {
         return;
     }
 
-    document.getElementById('lyric-content').innerHTML = '<p class="text-gray-400 text-lg animate-pulse">正在加载歌词...</p>';
+    document.getElementById('lyric-content').innerHTML = '<p class="t-text-muted text-lg animate-pulse">正在加载歌词...</p>';
     currentLyricLines = [];
 
     // ===== 尝试读取缓存 =====
@@ -3669,7 +3709,7 @@ function renderLyric(lines, emptyMsg = '暂无歌词') {
     container.innerHTML = '';
 
     if (lines.length === 0) {
-        container.innerHTML = `<p class="text-gray-400 text-lg font-medium">${emptyMsg}</p>`;
+        container.innerHTML = `<p class="t-text-muted text-lg font-medium">${emptyMsg}</p>`;
         return;
     }
 
@@ -3745,7 +3785,7 @@ function renderLyric(lines, emptyMsg = '暂无歌词') {
             line.extendedLyrics.forEach(extText => {
                 if (!extText) return;
                 const extSpan = document.createElement('span');
-                extSpan.className = 'extended text-sm md:text-base text-gray-400 mt-1 block w-fit mx-auto';
+                extSpan.className = 'extended text-sm md:text-base t-text-muted mt-1 block w-fit mx-auto';
                 extSpan.textContent = extText;
                 contentDiv.appendChild(extSpan);
             });
@@ -3843,11 +3883,11 @@ function switchSyncMode(mode) {
 
     if (mode === 'local') {
         btnLocal.className = "px-4 py-2 rounded-lg text-sm font-medium bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500 transition-all";
-        btnRemote.className = "px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all";
+        btnRemote.className = "px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 t-text-muted hover:bg-gray-200 transition-all";
         formLocal.classList.remove('hidden');
         formRemote.classList.add('hidden');
     } else {
-        btnLocal.className = "px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all";
+        btnLocal.className = "px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 t-text-muted hover:bg-gray-200 transition-all";
         btnRemote.className = "px-4 py-2 rounded-lg text-sm font-medium bg-blue-100 text-blue-700 ring-2 ring-blue-500 transition-all";
         formLocal.classList.add('hidden');
         formRemote.classList.remove('hidden');
@@ -4045,16 +4085,17 @@ function renderMyLists(data) {
     // Helper to create list item
     const createItem = (id, name, icon, count) => {
         const div = document.createElement('div');
-        div.className = "px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 cursor-pointer flex items-center group transition-colors overflow-hidden";
+        div.className = "px-6 py-2 text-sm t-text-muted hover:t-bg-main cursor-pointer flex items-center group transition-colors overflow-hidden";
+        div.setAttribute('data-sidebar-list-id', id);
         div.onclick = () => handleListClick(id);
 
         // Use createMarqueeHtml for list name
         const nameHtml = name.length > 8 ? createMarqueeHtml(name, 'flex-1') : `<span class="ml-2 flex-1 truncate">${name}</span>`;
 
         div.innerHTML = `
-            <i class="fas ${icon} w-5 text-gray-400 group-hover:text-emerald-500 transition-colors flex-shrink-0"></i>
+            <i class="fas ${icon} w-5 t-text-muted group-hover:text-emerald-500 transition-colors flex-shrink-0"></i>
             ${name.length > 8 ? `<div class="ml-2 flex-1 overflow-hidden">${nameHtml}</div>` : nameHtml}
-            <span class="text-xs text-gray-300 group-hover:text-gray-400 mr-2 flex-shrink-0">${count}</span>
+            <span class="text-xs text-gray-300 group-hover:t-text-muted mr-2 flex-shrink-0">${count}</span>
             ${id !== 'default' && id !== 'love' ? `<i class="fas fa-trash text-gray-300 hover:text-red-500 hidden group-hover:block flex-shrink-0" onclick="handleRemoveList('${id}', event)"></i>` : ''}
         `;
         return div;
@@ -4138,6 +4179,28 @@ function handleListClick(listId) {
     currentSearchScope = 'local_list';
     document.getElementById('search-source').classList.add('hidden'); // Hide selector
 
+    // Reset all tabs to muted, then highlight Favorites as the parent
+    document.querySelectorAll('[id^="tab-"]').forEach(el => {
+        el.classList.remove('active-tab', 'text-emerald-600');
+        el.classList.add('t-text-muted');
+    });
+    const favTab = document.getElementById('tab-favorites');
+    if (favTab) {
+        favTab.classList.add('active-tab');
+        favTab.classList.remove('t-text-muted');
+    }
+
+    // Highlight Child List
+    document.querySelectorAll('[data-sidebar-list-id]').forEach(el => {
+        el.classList.remove('active-sub-item');
+        el.classList.add('t-text-muted');
+    });
+    const subItem = document.querySelector(`[data-sidebar-list-id="${listId}"]`);
+    if (subItem) {
+        subItem.classList.add('active-sub-item');
+        subItem.classList.remove('t-text-muted');
+    }
+
     // Render
     currentPlaylist = list; // Update global playlist
     currentPage = 1; // Reset pagination
@@ -4161,11 +4224,21 @@ function handleFavoritesClick() {
     setTimeout(() => activeView.classList.remove('opacity-0'), 10); // Simple fade
 
     // Highlight Header
-    document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.remove('active-tab', 'text-emerald-600'));
+    document.querySelectorAll('[id^="tab-"]').forEach(el => {
+        el.classList.remove('active-tab', 'text-emerald-600');
+        el.classList.add('t-text-muted');
+    });
     const favTab = document.getElementById('tab-favorites');
     if (favTab) {
         favTab.classList.add('active-tab');
+        favTab.classList.remove('t-text-muted');
     }
+
+    // Always clear sub-item highlight when switching to "All Favorites"
+    document.querySelectorAll('[data-sidebar-list-id]').forEach(el => {
+        el.classList.remove('active-sub-item');
+        el.classList.add('t-text-muted');
+    });
 
     // UI Updates
     document.getElementById('page-title').innerText = "我的收藏 (全部)";
@@ -4444,11 +4517,11 @@ function switchCustomSourceMode(mode) {
     // 更新按钮样式
     document.getElementById('btn-source-file').className = mode === 'file'
         ? 'px-4 py-2 text-sm font-medium bg-emerald-100 text-emerald-700 rounded-lg'
-        : 'px-4 py-2 text-sm font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200';
+        : 'px-4 py-2 text-sm font-medium bg-gray-100 t-text-muted rounded-lg hover:bg-gray-200';
 
     document.getElementById('btn-source-url').className = mode === 'url'
         ? 'px-4 py-2 text-sm font-medium bg-emerald-100 text-emerald-700 rounded-lg'
-        : 'px-4 py-2 text-sm font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200';
+        : 'px-4 py-2 text-sm font-medium bg-gray-100 t-text-muted rounded-lg hover:bg-gray-200';
 
     // 切换显示
     document.getElementById('custom-source-file').classList.toggle('hidden', mode !== 'file');
@@ -4689,7 +4762,7 @@ async function renderCustomSources() {
         // 空状态
         if (list.length === 0) {
             container.innerHTML = `
-                <div class="flex flex-col items-center justify-center p-6 text-gray-400">
+                <div class="flex flex-col items-center justify-center p-6 t-text-muted">
                     <i class="fas fa-box-open text-3xl mb-3 opacity-30"></i>
                     <p class="text-sm">暂无自定义源</p>
                     ${containerId === 'custom-sources-list' ?
@@ -4705,7 +4778,7 @@ async function renderCustomSources() {
         list.forEach((source, index) => {
             const div = document.createElement('div');
             // 设置界面使用稍紧凑的样式，模态框使用标准样式 (这里为了统一先用一样的，微调边距)
-            div.className = `bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all mb-3 relative group flex items-start source-item`;
+            div.className = `t-bg-panel p-4 rounded-xl border t-border-main shadow-sm hover:shadow-md transition-all mb-3 relative group flex items-start source-item`;
             div.dataset.id = source.id;
             div.dataset.enabled = source.enabled;
             div.dataset.index = index;
@@ -4714,21 +4787,21 @@ async function renderCustomSources() {
             let supportedBadges = '';
             if (source.supportedSources && source.supportedSources.length > 0) {
                 const sourceMap = {
-                    'kg': { name: '酷狗', color: 'bg-blue-100 text-blue-700' },
-                    'kw': { name: '酷我', color: 'bg-yellow-100 text-yellow-700' },
-                    'tx': { name: 'QQ', color: 'bg-green-100 text-green-700' },
-                    'wy': { name: '网易', color: 'bg-red-100 text-red-700' },
-                    'mg': { name: '咪咕', color: 'bg-pink-100 text-pink-700' }
+                    'kg': { name: '酷狗', color: 't-badge-blue' },
+                    'kw': { name: '酷我', color: 't-badge-yellow' },
+                    'tx': { name: 'QQ', color: 't-badge-green' },
+                    'wy': { name: '网易', color: 't-badge-red' },
+                    'mg': { name: '咪咕', color: 't-badge-pink' }
                 };
 
                 supportedBadges = `<div class="flex flex-wrap gap-2 mt-2">
                 ${source.supportedSources.map(s => {
-                    const info = sourceMap[s] || { name: s, color: 'bg-gray-100 text-gray-600' };
-                    return `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${info.color}">${info.name}</span>`;
+                    const info = sourceMap[s] || { name: s, color: 't-badge-gray' };
+                    return `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold transition-colors ${info.color}">${info.name}</span>`;
                 }).join('')}
             </div>`;
             } else {
-                supportedBadges = `<div class="mt-2 text-[10px] text-gray-400 italic">未知支持源</div>`;
+                supportedBadges = `<div class="mt-2 text-[10px] t-text-muted italic">未知支持源</div>`;
             }
 
             const size = source.size && !isNaN(source.size) ? (source.size / 1024).toFixed(1) + ' KB' : '未知大小';
@@ -4743,18 +4816,18 @@ async function renderCustomSources() {
 
             if (source.enabled) {
                 if (source.status === 'success') {
-                    statusBadge = `<span class="text-[10px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1"><i class="fas fa-check-circle"></i>正常</span>`;
+                    statusBadge = `<span class="text-[10px] bg-emerald-50 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30 px-1.5 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1 transition-colors"><i class="fas fa-check-circle"></i>正常</span>`;
                 } else if (source.status === 'failed') {
-                    statusBadge = `<span class="text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full border border-red-100 flex items-center gap-1 cursor-help" title="${source.error || '加载失败'}"><i class="fas fa-times-circle"></i>失败</span>`;
-                    errorMsg = `<div class="text-[10px] text-red-500 mt-1 flex items-start gap-1 p-1.5 bg-red-50 rounded"><i class="fas fa-info-circle mt-0.5 flex-shrink-0"></i><span class="break-all">${source.error || '未知错误'}</span></div>`;
+                    statusBadge = `<span class="text-[10px] bg-red-50 text-red-600 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30 px-1.5 py-0.5 rounded-full border border-red-100 flex items-center gap-1 cursor-help transition-colors" title="${source.error || '加载失败'}"><i class="fas fa-times-circle"></i>失败</span>`;
+                    errorMsg = `<div class="text-[10px] text-red-500 dark:text-red-400 mt-1 flex items-start gap-1 p-1.5 bg-red-50 dark:bg-red-900/20 rounded transition-colors"><i class="fas fa-info-circle mt-0.5 flex-shrink-0"></i><span class="break-all">${source.error || '未知错误'}</span></div>`;
                 } else {
                     // If enabled but no status (yet), assume initializing or loaded before status tracking
-                    statusBadge = `<span class="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full border border-blue-100 flex items-center gap-1"><i class="fas fa-circle-notch fa-spin"></i>加载...</span>`;
+                    statusBadge = `<span class="text-[10px] bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30 px-1.5 py-0.5 rounded-full border border-blue-100 flex items-center gap-1 transition-colors"><i class="fas fa-circle-notch fa-spin"></i>加载...</span>`;
                 }
             }
 
             div.innerHTML = `
-            <div class="flex items-center self-stretch cursor-grab custom-source-handle text-gray-400 hover:text-emerald-500 pr-4 -ml-2 transition-all active:scale-110 touch-none" title="拖拽排序">
+            <div class="flex items-center self-stretch cursor-grab custom-source-handle t-text-muted hover:text-emerald-500 pr-4 -ml-2 transition-all active:scale-110 touch-none" title="拖拽排序">
                 <i class="fas fa-grip-vertical text-lg"></i>
             </div>
             <div class="flex justify-between items-start flex-1 min-w-0">
@@ -4762,17 +4835,17 @@ async function renderCustomSources() {
                     <div class="flex items-center gap-2 mb-1 flex-wrap">
                         <div class="flex items-center gap-2 min-w-0 flex-1">
                             <i class="fas fa-file-code text-emerald-500 flex-shrink-0"></i>
-                            ${createMarqueeHtml(source.name, "font-bold text-gray-800 text-sm")}
+                            ${createMarqueeHtml(source.name, "font-bold t-text-main text-sm")}
                         </div>
                         <div class="flex items-center gap-2">
                              ${statusBadge}
                         </div>
                     </div>
                     ${errorMsg}
-                    <div class="flex items-center text-[10px] text-gray-400 space-x-2 mt-1">
+                    <div class="flex items-center text-[10px] t-text-muted space-x-2 mt-1">
                         <span><i class="fas fa-user mr-1"></i>${source.author || '未知'}</span>
-                        <span class="hidden sm:inline"><i class="far fa-hdd mr-1"></i>${size}</span>
-                        <span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded shrink-0">${source.version ? (/^v/i.test(source.version) ? source.version : 'v' + source.version) : '未知'}</span>
+                        <span><i class="far fa-hdd mr-1"></i>${size}</span>
+                        <span class="t-bg-main t-text-muted px-1.5 py-0.5 rounded shrink-0 transition-colors font-mono pointer-events-none">${source.version ? (/^v/i.test(source.version) ? source.version : 'v' + source.version) : '未知'}</span>
                     </div>
                     ${supportedBadges}
                 </div>
@@ -4780,21 +4853,21 @@ async function renderCustomSources() {
                 <div class="flex flex-col items-end gap-2 shrink-0">
                     <button onclick="toggleSource('${source.id}', ${source.enabled})" 
                             class="px-3 py-1 rounded-lg text-xs font-medium transition-colors whitespace-nowrap w-20 flex justify-center items-center ${source.enabled
-                    ? (source.status === 'failed' ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200')
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
+                    ? (source.status === 'failed' ? 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-500/30')
+                    : 't-bg-track t-text-muted hover:t-bg-item-hover'}">
                         ${source.enabled ? '已启用' : '已禁用'}
                     </button>
                     
                     <div class="flex items-center gap-1">
                         ${source.enabled && source.status === 'failed' ? `
                         <button onclick="reloadSource('${source.id}')" 
-                                class="p-1.5 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                                class="p-1.5 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/40 rounded-lg transition-colors"
                                 title="尝试重新加载">
                             <i class="fas fa-sync-alt text-sm"></i>
                         </button>` : ''}
                         
                         <button onclick="deleteSource('${source.id}')" 
-                                class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                class="p-1.5 t-text-muted hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/40 rounded-lg transition-colors"
                                 title="删除">
                             <i class="fas fa-trash-alt text-sm"></i>
                         </button>
@@ -5335,7 +5408,7 @@ function toggleCommentModal() {
             }
         } else {
             console.warn('[Comment] No song playing, showing empty state');
-            document.getElementById('comment-list').innerHTML = '<div class="text-center py-10 text-gray-400 font-bold">请先播放歌曲</div>';
+            document.getElementById('comment-list').innerHTML = '<div class="text-center py-10 t-text-muted font-bold">请先播放歌曲</div>';
             document.getElementById('comment-loader').classList.add('hidden');
         }
     } else {
@@ -5360,19 +5433,19 @@ async function switchCommentType(type) {
 
     if (type === 'hot') {
         hotBtn.classList.add('text-emerald-600');
-        hotBtn.classList.remove('text-gray-400');
+        hotBtn.classList.remove('t-text-muted');
         hotBtn.querySelector('div').classList.remove('scale-x-0');
 
         newBtn.classList.remove('text-emerald-600');
-        newBtn.classList.add('text-gray-400');
+        newBtn.classList.add('t-text-muted');
         newBtn.querySelector('div').classList.add('scale-x-0');
     } else {
         newBtn.classList.add('text-emerald-600');
-        newBtn.classList.remove('text-gray-400');
+        newBtn.classList.remove('t-text-muted');
         newBtn.querySelector('div').classList.remove('scale-x-0');
 
         hotBtn.classList.remove('text-emerald-600');
-        hotBtn.classList.add('text-gray-400');
+        hotBtn.classList.add('t-text-muted');
         hotBtn.querySelector('div').classList.add('scale-x-0');
     }
 
@@ -5526,12 +5599,12 @@ function createCommentItemHTML(comment, isReply = false) {
     const defaultAvatar = '/music/assets/logo.svg';
     const avatar = comment.avatar || defaultAvatar;
     const isDefault = avatar.includes('logo.svg') || !comment.avatar;
-    const avatarClass = `w-8 h-8 md:w-10 md:h-10 rounded-full shadow-sm hover:scale-110 transition-transform bg-gray-50 flex-shrink-0 object-cover ${isDefault ? 'dynamic-logo p-1.5' : ''}`;
+    const avatarClass = `w-8 h-8 md:w-10 md:h-10 rounded-full shadow-sm hover:scale-110 transition-transform t-bg-main flex-shrink-0 object-cover ${isDefault ? 'dynamic-logo p-1.5' : ''}`;
 
     let replyHtml = '';
     if (comment.reply && comment.reply.length > 0) {
         replyHtml = `
-            <div class="mt-4 ml-2 pl-4 border-l-2 border-gray-100 space-y-4">
+            <div class="mt-4 ml-2 pl-4 border-l-2 t-border-main space-y-4">
                 ${comment.reply.map(r => createCommentItemHTML(r, true)).join('')}
             </div>
         `;
@@ -5544,13 +5617,13 @@ function createCommentItemHTML(comment, isReply = false) {
                  onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='/music/assets/logo.svg';this.classList.add('dynamic-logo','p-1.5','bg-emerald-50');this.style.filter='var(--logo-filter, none)';}">
             <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mb-1">
-                    <span class="text-xs md:text-sm font-black text-gray-700 truncate">${comment.userName}</span>
-                    <div class="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
+                    <span class="text-xs md:text-sm font-black t-text-main truncate">${comment.userName}</span>
+                    <div class="flex items-center gap-1.5 text-[10px] t-text-muted font-bold">
                         <i class="far fa-thumbs-up"></i>
                         <span>${comment.likedCount || 0}</span>
                     </div>
                 </div>
-                <p class="text-xs md:text-sm text-gray-600 leading-relaxed break-words whitespace-pre-wrap">${comment.text}</p>
+                <p class="text-xs md:text-sm t-text-muted leading-relaxed break-words whitespace-pre-wrap">${comment.text}</p>
                 ${comment.images && comment.images.length > 0 ? `
                     <div class="mt-2 flex flex-wrap gap-2">
                         ${comment.images.map(img => `
@@ -5560,7 +5633,7 @@ function createCommentItemHTML(comment, isReply = false) {
                         `).join('')}
                     </div>
                 ` : ''}
-                <div class="mt-2 flex items-center gap-3 text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+                <div class="mt-2 flex items-center gap-3 text-[10px] t-text-muted font-bold uppercase tracking-tight">
                     <span>${timeStr}${location}</span>
                 </div>
                 ${replyHtml}
@@ -5679,21 +5752,21 @@ function showSelect(title, message, options = {}) {
         modal.className = "fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in";
         modal.innerHTML = `
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"></div>
-            <div class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all animate-slide-up relative z-10 border border-white/20">
+            <div class="t-bg-panel/90 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all animate-slide-up relative z-10 border border-white/20">
                 <div class="p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-full ${danger ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'} flex items-center justify-center shrink-0">
                             <i class="fas ${danger ? 'fa-exclamation-triangle' : 'fa-question-circle'} text-lg"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">${title}</h3>
+                        <h3 class="text-lg font-bold t-text-main">${title}</h3>
                     </div>
-                    <p class="text-sm text-gray-500 leading-relaxed pl-1">${message}</p>
+                    <p class="text-sm t-text-muted leading-relaxed pl-1">${message}</p>
                 </div>
-                <div class="p-4 bg-gray-50/50 flex gap-3 flex-row-reverse">
+                <div class="p-4 t-bg-main/50 flex gap-3 flex-row-reverse">
                     <button id="confirm-ok" class="flex-1 py-2.5 text-sm font-bold text-white ${btnColor} rounded-xl shadow-lg transition-all active:scale-95">
                         ${confirmText}
                     </button>
-                    <button id="confirm-cancel" class="flex-1 py-2.5 text-sm font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
+                    <button id="confirm-cancel" class="flex-1 py-2.5 text-sm font-bold t-text-muted hover:t-text-main hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all">
                         ${cancelText}
                     </button>
                 </div>
@@ -6100,20 +6173,6 @@ function toggleSidebar() {
         backdrop.classList.add('hidden');
     }
 }
-
-// Close sidebar when clicking a link on mobile
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#main-sidebar a, #main-sidebar div[onclick]').forEach(el => {
-        el.addEventListener('click', () => {
-            if (window.innerWidth < 768) {
-                const sidebar = document.getElementById('main-sidebar');
-                if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
-                    toggleSidebar();
-                }
-            }
-        });
-    });
-});
 
 // Auto-adjust layout on resize
 window.addEventListener('resize', () => {

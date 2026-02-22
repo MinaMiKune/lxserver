@@ -277,7 +277,8 @@ export async function handleImport(req: IncomingMessage, res: ServerResponse) {
 // 如果提供了 username，返回 open + username 的源
 // 如果没提供，只返回 open 的源
 export async function handleList(req: IncomingMessage, res: ServerResponse, username: string) {
-    const allSources: any[] = []
+    const openSources: any[] = []
+    const userSources: any[] = []
 
     // 1. 读取 Open 源
     const openSourcesDir = getSourceDir('open') // -> .../_open
@@ -285,42 +286,108 @@ export async function handleList(req: IncomingMessage, res: ServerResponse, user
 
     if (fs.existsSync(openMetaPath)) {
         try {
-            const openSources = JSON.parse(fs.readFileSync(openMetaPath, 'utf-8'))
-            openSources.forEach((s: any) => {
+            const parsedOpenSources = JSON.parse(fs.readFileSync(openMetaPath, 'utf-8'))
+            parsedOpenSources.forEach((s: any) => {
                 s.owner = 'open'
                 s.isPublic = true
+                openSources.push(s)
             })
-            allSources.push(...openSources)
         } catch (e) { }
     }
 
     // 2. 读取 User 源 (如果有)
+    let userStates: Record<string, any> = {}
     if (username && username !== 'default') {
         const userSourcesDir = getSourceDir(username)
         const userMetaPath = path.join(userSourcesDir, 'sources.json')
+        const userStatesPath = path.join(userSourcesDir, 'states.json')
+
+        if (fs.existsSync(userStatesPath)) {
+            try {
+                userStates = JSON.parse(fs.readFileSync(userStatesPath, 'utf-8'))
+            } catch (e) { }
+        }
 
         if (fs.existsSync(userMetaPath)) {
             try {
-                const userSources = JSON.parse(fs.readFileSync(userMetaPath, 'utf-8'))
-                userSources.forEach((s: any) => {
+                const parsedUserSources = JSON.parse(fs.readFileSync(userMetaPath, 'utf-8'))
+                parsedUserSources.forEach((s: any) => {
                     s.owner = username
                     s.isPublic = false
+                    userSources.push(s)
                 })
-                allSources.push(...userSources)
             } catch (e) { }
         }
     }
 
+    // 合并列表：如果公开源和用户源存在相同ID，则排除公开源
+    const allSources: any[] = []
+    const userSourceIds = new Set(userSources.map(s => s.id))
+
+    openSources.forEach((s: any) => {
+        if (!userSourceIds.has(s.id)) {
+            if (userStates[s.id] && typeof userStates[s.id].enabled === 'boolean') {
+                s.enabled = userStates[s.id].enabled
+            }
+            allSources.push(s)
+        }
+    })
+
+    allSources.push(...userSources)
+
     // 补充运行时状态
     const enrichedSources = allSources.map((source: any) => {
         // 合并运行时状态
-        const status = getApiStatus(source.id)
+        const status = getApiStatus(source.owner, source.id)
         if (status) {
             source.status = status.status
             source.error = status.error
         }
         return source
     })
+
+    // ===== 自定义合并后的排序逻辑 =====
+    let targetOwner = (username && username !== 'default') ? username : 'open'
+    let orderPath = path.join(getSourceDir(targetOwner), 'order.json')
+    let order: string[] = []
+
+    if (!fs.existsSync(orderPath) && targetOwner !== 'open') {
+        // 未保存私有排序则尝试获取公开排序
+        orderPath = path.join(getSourceDir('open'), 'order.json')
+    }
+
+    if (fs.existsSync(orderPath)) {
+        try {
+            order = JSON.parse(fs.readFileSync(orderPath, 'utf-8'))
+        } catch (e) { }
+    }
+
+    if (order.length > 0) {
+        const idToIndex = new Map(order.map((id, index) => [id, index]))
+        enrichedSources.sort((a, b) => {
+            // 永远保持“已启用”在前的分组逻辑
+            if (a.enabled !== b.enabled) {
+                return a.enabled ? -1 : 1
+            }
+
+            // 同组内根据保存的绝对顺序排序
+            const indexA = idToIndex.has(a.id) ? idToIndex.get(a.id)! : 999999
+            const indexB = idToIndex.has(b.id) ? idToIndex.get(b.id)! : 999999
+
+            if (indexA !== indexB) {
+                return indexA - indexB
+            }
+            return 0
+        })
+    } else {
+        // 默认让启用的在前，禁用的在后
+        enrichedSources.sort((a, b) => {
+            if (a.enabled !== b.enabled) {
+                return a.enabled ? -1 : 1
+            }
+            return 0
+        })
+    }
 
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify(enrichedSources))
@@ -338,26 +405,51 @@ export async function handleToggle(req: IncomingMessage, res: ServerResponse) {
         let sourcesDir = getSourceDir(targetOwner)
         let metaPath = path.join(sourcesDir, 'sources.json')
 
-        if (!fs.existsSync(metaPath) && targetOwner !== 'open') {
-            // 尝试 fallback 到 open
+        let target: any = null
+        let sources: any[] = []
+        let isPublicSourceToggle = false
+
+        if (!fs.existsSync(sourcesDir)) {
+            fs.mkdirSync(sourcesDir, { recursive: true })
+        }
+
+        if (fs.existsSync(metaPath)) {
+            sources = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+            target = sources.find((s: any) => s.id === targetId)
+        }
+
+        if (!target && targetOwner !== 'open') {
+            // 尝试看看是否是普通用户在切换公共源
             const openSourcesDir = getSourceDir('open')
             const openMetaPath = path.join(openSourcesDir, 'sources.json')
             if (fs.existsSync(openMetaPath)) {
-                targetOwner = 'open'
-                sourcesDir = openSourcesDir
-                metaPath = openMetaPath
+                const openSources = JSON.parse(fs.readFileSync(openMetaPath, 'utf-8'))
+                const openTarget = openSources.find((s: any) => s.id === targetId)
+                if (openTarget) {
+                    target = openTarget
+                    isPublicSourceToggle = true
+                }
             }
         }
 
-        if (!fs.existsSync(metaPath)) {
-            throw new Error('源列表不存在')
-        }
-
-        const sources = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
-        const target = sources.find((s: any) => s.id === targetId)
-
         if (!target) {
             throw new Error('源不存在')
+        }
+
+        if (isPublicSourceToggle) {
+            // 普通用户独立记录公开源的开启/关闭状态，不修改公开源属性
+            const userStatesPath = path.join(sourcesDir, 'states.json')
+            let states: any = {}
+            if (fs.existsSync(userStatesPath)) {
+                try { states = JSON.parse(fs.readFileSync(userStatesPath, 'utf-8')) } catch (e) { }
+            }
+            if (!states[targetId]) states[targetId] = {}
+            states[targetId].enabled = enabled !== undefined ? enabled : !(states[targetId].enabled ?? target.enabled)
+            fs.writeFileSync(userStatesPath, JSON.stringify(states, null, 2))
+
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ success: true, enabled: states[targetId].enabled }))
+            return
         }
 
         const oldEnabled = target.enabled
@@ -375,7 +467,7 @@ export async function handleToggle(req: IncomingMessage, res: ServerResponse) {
 
             // 如果是尝试启用，检查启用后的实时状态
             if (target.enabled) {
-                const status = getApiStatus(targetId)
+                const status = getApiStatus(targetOwner, targetId)
                 if (status && status.status === 'failed' && status.error === 'REQUIRE_UNSAFE_VM') {
                     console.warn(`[CustomSource] Detect REQUIRE_UNSAFE_VM during toggle for ${targetId}, rolling back...`)
                     // 回滚状态
@@ -421,43 +513,52 @@ export async function handleReorder(req: IncomingMessage, res: ServerResponse) {
         let targetOwner = (username && username !== 'default') ? username : 'open'
         let sourcesDir = getSourceDir(targetOwner)
         let metaPath = path.join(sourcesDir, 'sources.json')
+        let orderPath = path.join(sourcesDir, 'order.json')
 
-        // Fallback to open if needed
-        if (!fs.existsSync(metaPath) && targetOwner !== 'open') {
+        if (!fs.existsSync(sourcesDir)) {
+            fs.mkdirSync(sourcesDir, { recursive: true })
+        }
+
+        // 保存混合列表的绝对顺序到 order.json
+        fs.writeFileSync(orderPath, JSON.stringify(sourceIds, null, 2))
+
+        // 向下兼容：同时尝试重排各自存在的 sources.json
+        if (fs.existsSync(metaPath)) {
+            const sources = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+            const currentSourcesMap = new Map(sources.map((s: any) => [s.id, s]))
+            const newSources: any[] = []
+
+            for (const id of sourceIds) {
+                if (currentSourcesMap.has(id)) {
+                    newSources.push(currentSourcesMap.get(id))
+                    currentSourcesMap.delete(id)
+                }
+            }
+            for (const [id, source] of currentSourcesMap) {
+                newSources.push(source)
+            }
+            fs.writeFileSync(metaPath, JSON.stringify(newSources, null, 2))
+        } else if (targetOwner !== 'open') {
+            // 如果用户自己的为空，也尝试重排一下 open 的 sources.json，以支持用户管理公共源的情况
             const openSourcesDir = getSourceDir('open')
             const openMetaPath = path.join(openSourcesDir, 'sources.json')
             if (fs.existsSync(openMetaPath)) {
-                targetOwner = 'open'
-                sourcesDir = openSourcesDir
-                metaPath = openMetaPath
+                const sources = JSON.parse(fs.readFileSync(openMetaPath, 'utf-8'))
+                const currentSourcesMap = new Map(sources.map((s: any) => [s.id, s]))
+                const newSources: any[] = []
+
+                for (const id of sourceIds) {
+                    if (currentSourcesMap.has(id)) {
+                        newSources.push(currentSourcesMap.get(id))
+                        currentSourcesMap.delete(id)
+                    }
+                }
+                for (const [id, source] of currentSourcesMap) {
+                    newSources.push(source)
+                }
+                fs.writeFileSync(openMetaPath, JSON.stringify(newSources, null, 2))
             }
         }
-
-        if (!fs.existsSync(metaPath)) {
-            throw new Error('源列表不存在')
-        }
-
-        // Read current sources
-        const sources = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
-
-        // Reconstruct the array: order it according to sourceIds, any missing go to the end
-        const newSources: any[] = []
-        const currentSourcesMap = new Map(sources.map((s: any) => [s.id, s]))
-
-        for (const id of sourceIds) {
-            if (currentSourcesMap.has(id)) {
-                newSources.push(currentSourcesMap.get(id))
-                currentSourcesMap.delete(id)
-            }
-        }
-
-        // Add any remaining sources that somehow weren't in the id array to the end
-        for (const [id, source] of currentSourcesMap) {
-            newSources.push(source)
-        }
-
-        // Save
-        fs.writeFileSync(metaPath, JSON.stringify(newSources, null, 2))
 
         // Reload APIs to apply new priority ordering
         await initUserApis(targetOwner)
